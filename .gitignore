@@ -35,3 +35,6 @@ bower_components/
 # Miscellaneous
 .DS_Store
 Thumbs.db
+
+# Affinity Cache file
+src/icon.png~lock~
