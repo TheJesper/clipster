@@ -1,6 +1,6 @@
 {
   "name": "clipster",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A modern VSCode extension to copy file/folder paths and contents with emojis.",
   "main": "./src/extension.js",
   "icon": "./src/icon.png",
@@ -49,17 +49,17 @@
       "explorer/context": [
         {
           "command": "extension.copyFileContentWithHeader",
-          "when": "resourceUri",
+          "when": "resourceUri && !resource.isDirectory",
           "group": "navigation"
         },
         {
           "command": "extension.copyFolderStructure",
-          "when": "resourceUri",
+          "when": "resourceUri && resource.isDirectory",
           "group": "navigation"
         },
         {
           "command": "extension.copyFolderStructureAndContent",
-          "when": "resourceUri",
+          "when": "resourceUri && resource.isDirectory",
           "group": "navigation"
         }
       ]
