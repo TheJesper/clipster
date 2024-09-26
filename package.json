@@ -1,0 +1,73 @@
+{
+  "name": "clipster",
+  "version": "1.0.4",
+  "description": "A modern VSCode extension to copy file/folder paths and contents with emojis.",
+  "main": "./src/extension.js",
+  "icon": "./src/icon.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "publisher": "jesperwilfing",
+  "engines": {
+    "vscode": "^1.93.0"
+  },
+  "scripts": {
+    "build:vsix": "standard-version && vsce package --out ./out/clipster-$(npm pkg get version | tr -d '\"').vsix",
+    "release": "standard-version"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.1",
+    "@types/vscode": "^1.93.0",
+    "esbuild": "^0.24.0",
+    "ignore": "^5.1.8",
+    "standard-version": "^9.5.0"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.copyFileContentWithHeader",
+        "title": "📄 1 Copy File Content with Path"
+      },
+      {
+        "command": "extension.copyFolderStructure",
+        "title": "📂 2 Copy Folder Structure"
+      },
+      {
+        "command": "extension.copyFolderStructureAndContent",
+        "title": "📂📄 3 Copy Folder Structure and Content"
+      },
+      {
+        "command": "extension.copyRootStructure",
+        "title": "📂 4 Copy Root Structure"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "extension.copyFileContentWithHeader",
+          "when": "resourceUri",
+          "group": "navigation"
+        },
+        {
+          "command": "extension.copyFolderStructure",
+          "when": "resourceUri",
+          "group": "navigation"
+        },
+        {
+          "command": "extension.copyFolderStructureAndContent",
+          "when": "resourceUri",
+          "group": "navigation"
+        }
+      ]
+    },
+    "activationEvents": [
+      "onView:explorer",
+      "onCommand:extension.copyFileContentWithHeader",
+      "onCommand:extension.copyFolderStructure",
+      "onCommand:extension.copyFolderStructureAndContent",
+      "onCommand:extension.copyRootStructure"
+    ]
+  }
+}

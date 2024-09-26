@@ -1,0 +1,21 @@
+# Ignore the build files (optional)
+out/
+
+# Ignore documentation and config files
+tsconfig.json
+
+# Ignore yarn lockfile
+yarn.lock
+
+# Do NOT ignore the src directory (especially extension.js)
+!src/extension.js
+
+# Ignore temporary or backup files
+*.lock
+*.log
+
+#  Ignore yarrn
+.yarn
+
+# Ignore temporary or lock files
+*~lock~

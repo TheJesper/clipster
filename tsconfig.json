@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "outDir": "./out",
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "allowJs": true, // Allow JavaScript files
+    "checkJs": false // Optional: if you don’t want TypeScript to check your JS files
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
