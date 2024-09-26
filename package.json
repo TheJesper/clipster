@@ -1,6 +1,6 @@
 {
   "name": "clipster",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A modern VSCode extension to copy file/folder paths and contents with emojis.",
   "main": "./src/extension.js",
   "icon": "./src/icon.png",

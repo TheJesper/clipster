@@ -1,59 +1,53 @@
 
-# Clipster: Dirs & Files to Clipboard 🎉
+# 📂 Clipster: Dirs & Files to Clipboard
 
-**Clipster** is a fun and efficient Visual Studio Code extension that helps you copy file and folder structures to your clipboard, complete with emojis for added fun! Whether you're working with files or folders, Clipster is here to streamline your workflow.
+**Clipster** is a Visual Studio Code extension that adds useful options to the **File Explorer** context menu when right-clicking on files or folders. It enables you to easily copy file and folder structures, as well as file contents, in a well-organized, clean, and readable format. The primary goal is to simplify sharing code, folder structures, and file content in chats with colleagues or pasting into AI tools like ChatGPT for enhanced collaboration and feedback.
 
-## Features
+### ✨ Key Features:
 
-- 📄 **Copy File Content with Path**: Copies the full path of a file to the clipboard along with its content.
-- 📂 **Copy Folder Structure**: Copies the structure of the selected folder, including directories and files, while respecting `.gitignore` and a set of default ignored patterns (e.g., `node_modules`, `dist`, etc.).
-- 📂📄 **Copy Folder Structure and Content**: Copies the folder structure and the content of each file within, while ignoring unnecessary files or folders.
+- **📄 Copy File Content with Path**:  
+  Copy the content of any file along with its full path as a header, making it easier to share both the file content and its location.
 
-## Default Ignored Patterns
+- **📂 Copy Folder Structure**:  
+  Copy the folder structure (including subfolders) with emojis to represent directories and files. This makes it easier to share the structure of your codebase without diving into each file.
 
-By default, Clipster will ignore the following files and folders:
+- **📂📄 Copy Folder Structure and Content**:  
+  Copy not only the folder structure but also the content of each file in a readable format. Perfect for sharing an entire codebase snippet in a chat or AI tool.
 
-- `node_modules`
-- `dist`
-- `cypress-report`
-- `.git`
-- Any other patterns specified in `.gitignore`
+- **📂 Copy Root Structure**:  
+  Quickly copy the root folder structure of a project to share the overall layout.
 
-This ensures that only relevant files are copied when working with folder structures.
+### 🚀 Usage Scenarios:
 
-## Installation
+1. **Share Code with Colleagues**:  
+   Share readable file content or folder structure easily in chats, helping colleagues get the context of your project without needing to navigate the whole repository.
 
-1. Install the **Clipster** extension from the VSIX file.
-2. Open your VS Code instance.
-3. Go to the **Extensions** view (`Ctrl+Shift+X`).
-4. Click the **three dots** in the top-right corner and select **Install from VSIX...**.
-5. Browse to the `.vsix` file you downloaded and click **Install**.
+2. **Paste into AI Tools (e.g., ChatGPT)**:  
+   Easily paste file structures and content into AI tools for discussions, code reviews, or troubleshooting assistance.
 
-## How to Use
+3. **Present Your Project Structure**:  
+   Quickly show the overall structure of your project when collaborating remotely, without needing to take screenshots or manually list files.
 
-### Copy File Content with Path
-1. Right-click any file in the explorer.
-2. Select **📄 Copy File Content with Path**.
-3. The file's path and content will be copied to your clipboard.
+### 🛠 How to Use:
 
-### Copy Folder Structure
-1. Right-click a folder in the explorer.
-2. Select **📂 Copy Folder Structure**.
-3. The folder structure will be copied to your clipboard with emojis.
+1. **Copy File Content**:  
+   Right-click on any file in the explorer and select `📄 1 Copy File Content with Path`.
 
-### Copy Folder Structure and Content
-1. Right-click a folder in the explorer.
-2. Select **📂📄 Copy Folder Structure and Content**.
-3. The folder structure, along with file contents, will be copied to your clipboard.
+2. **Copy Folder Structure**:  
+   Right-click on any folder and select `📂 2 Copy Folder Structure`.
 
-## Ignoring Files
+3. **Copy Folder Structure and Content**:  
+   Right-click on any folder and select `📂📄 3 Copy Folder Structure and Content`.
 
-Clipster will respect any `.gitignore` file it finds in the root of the folder. Additionally, by default, Clipster ignores common folders such as `node_modules` and `dist`. You can customize these settings if necessary.
+4. **Copy Root Structure**:  
+   Right-click the root folder in your workspace and select `📂 4 Copy Root Structure`.
 
-## Contributing
+### 🎯 Why Use Clipster?
 
-Feel free to fork this project and submit pull requests. Contributions are always welcome!
+**Clipster** helps you format and share files and directories in a clean, organized, and readable way, especially for sharing in professional settings or discussions. Whether it's in a quick chat with a colleague or when seeking help from AI tools like ChatGPT, Clipster ensures the information is presented clearly and concisely.
 
-## License
+---
 
-This project is licensed under the MIT License.
+### 📝 License
+
+This extension is licensed under the [MIT License](LICENSE).
