@@ -1,53 +1,48 @@
 
-# 📂 Clipster: Dirs & Files to Clipboard
+# Clipster
 
-**Clipster** is a Visual Studio Code extension that adds useful options to the **File Explorer** context menu when right-clicking on files or folders. It enables you to easily copy file and folder structures, as well as file contents, in a well-organized, clean, and readable format. The primary goal is to simplify sharing code, folder structures, and file content in chats with colleagues or pasting into AI tools like ChatGPT for enhanced collaboration and feedback.
+Clipster is a VSCode extension for copying file and folder paths and contents with emojis.
 
-### ✨ Key Features:
+## Requirements
+- Node.js (>= v14.x.x)
+- Yarn (>= 1.22.0)
+- Visual Studio Code (>= 1.93.0)
 
-- **📄 Copy File Content with Path**:  
-  Copy the content of any file along with its full path as a header, making it easier to share both the file content and its location.
+## Scripts
 
-- **📂 Copy Folder Structure**:  
-  Copy the folder structure (including subfolders) with emojis to represent directories and files. This makes it easier to share the structure of your codebase without diving into each file.
+| Script              | Description                                                   |
+| ------------------- | ------------------------------------------------------------- |
+| `yarn clean`        | Cleans the `out` directory by removing its contents.           |
+| `yarn build`        | Builds the extension by packaging it into a VSIX file.         |
+| `yarn install`      | Installs the extension into your local VSCode instance.        |
+| `yarn bump-build`   | Bumps version, builds the extension, and updates the changelog.|
+| `yarn clean-build-install` | Cleans, builds, and installs the extension in one go.   |
+| `yarn release`      | Prepares the extension for release, bumping the version.       |
 
-- **📂📄 Copy Folder Structure and Content**:  
-  Copy not only the folder structure but also the content of each file in a readable format. Perfect for sharing an entire codebase snippet in a chat or AI tool.
+## Installation
 
-- **📂 Copy Root Structure**:  
-  Quickly copy the root folder structure of a project to share the overall layout.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/TheJesper/clipster
+   cd clipster
+   ```
 
-### 🚀 Usage Scenarios:
+2. Install the dependencies:
+   ```bash
+   yarn install
+   ```
 
-1. **Share Code with Colleagues**:  
-   Share readable file content or folder structure easily in chats, helping colleagues get the context of your project without needing to navigate the whole repository.
+3. Build the extension:
+   ```bash
+   yarn build
+   ```
 
-2. **Paste into AI Tools (e.g., ChatGPT)**:  
-   Easily paste file structures and content into AI tools for discussions, code reviews, or troubleshooting assistance.
+4. Install the extension:
+   ```bash
+   yarn install
+   ```
 
-3. **Present Your Project Structure**:  
-   Quickly show the overall structure of your project when collaborating remotely, without needing to take screenshots or manually list files.
+5. Start using Clipster in VSCode!
 
-### 🛠 How to Use:
-
-1. **Copy File Content**:  
-   Right-click on any file in the explorer and select `📄 1 Copy File Content with Path`.
-
-2. **Copy Folder Structure**:  
-   Right-click on any folder and select `📂 2 Copy Folder Structure`.
-
-3. **Copy Folder Structure and Content**:  
-   Right-click on any folder and select `📂📄 3 Copy Folder Structure and Content`.
-
-4. **Copy Root Structure**:  
-   Right-click the root folder in your workspace and select `📂 4 Copy Root Structure`.
-
-### 🎯 Why Use Clipster?
-
-**Clipster** helps you format and share files and directories in a clean, organized, and readable way, especially for sharing in professional settings or discussions. Whether it's in a quick chat with a colleague or when seeking help from AI tools like ChatGPT, Clipster ensures the information is presented clearly and concisely.
-
----
-
-### 📝 License
-
-This extension is licensed under the [MIT License](LICENSE).
+## License
+This project is licensed under the MIT License.

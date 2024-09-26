@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 function activate(context) {
-  vscode.window.showInformationMessage("Clipster activated!");
+  vscode.window.showInformationMessage("📂 Clipster activated!");
   // Command to copy the file content with the file path as the header
   let copyFileContentWithHeader = vscode.commands.registerCommand(
     "extension.copyFileContentWithHeader",
