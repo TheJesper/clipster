@@ -38,3 +38,6 @@ Thumbs.db
 
 # Affinity Cache file
 src/icon.png~lock~
+
+# Ignore the out directory
+out/
