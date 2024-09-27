@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.21",
+  "version": "1.1.22",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "publisher": "jesperwilfing",
@@ -50,40 +50,8 @@
   "contributes": {
     "submenus": [
       {
-        "id": "Clipster 📁",
+        "id": "Clipster",
         "label": "Clipster 📁"
-      }
-    ],
-    "commands": [
-      {
-        "command": "clipster.copyFileContentWithHeader",
-        "title": "📝 Copy File Content with Path",
-        "category": "Clipster"
-      },
-      {
-        "command": "clipster.copyFolderStructure",
-        "title": "📁 Copy Folder Structure",
-        "category": "Clipster"
-      },
-      {
-        "command": "clipster.copyFolderStructureAndContent",
-        "title": "📁 Copy Folder Structure and Content",
-        "category": "Clipster"
-      },
-      {
-        "command": "clipster.copyRootFolderPath",
-        "title": "📁 Copy Root Folder Path",
-        "category": "Clipster"
-      },
-      {
-        "command": "clipster.copyRootFolderStructure",
-        "title": "📁 Copy Root Folder Structure",
-        "category": "Clipster"
-      },
-      {
-        "command": "clipster.copyRootFolderStructureAndContent",
-        "title": "📝 Copy Root Folder Structure and Content",
-        "category": "Clipster"
       }
     ],
     "menus": {
@@ -92,37 +60,37 @@
           "command": "clipster.copyFileContentWithHeader",
           "when": "explorerResourceIsFile",
           "group": "navigation",
-          "submenu": "Clipster 📁"
+          "submenu": "Clipster"
         },
         {
           "command": "clipster.copyFolderStructure",
           "when": "explorerResourceIsFolder",
           "group": "navigation",
-          "submenu": "Clipster 📁"
+          "submenu": "Clipster"
         },
         {
           "command": "clipster.copyFolderStructureAndContent",
           "when": "explorerResourceIsFolder",
           "group": "navigation",
-          "submenu": "Clipster 📁"
+          "submenu": "Clipster"
         },
         {
           "command": "clipster.copyRootFolderPath",
           "when": "explorerResourceIsFile || explorerResourceIsFolder",
           "group": "navigation",
-          "submenu": "Clipster 📁"
+          "submenu": "Clipster"
         },
         {
           "command": "clipster.copyRootFolderStructure",
           "when": "explorerResourceIsFile || explorerResourceIsFolder",
           "group": "navigation",
-          "submenu": "Clipster 📁"
+          "submenu": "Clipster"
         },
         {
           "command": "clipster.copyRootFolderStructureAndContent",
           "when": "explorerResourceIsFile || explorerResourceIsFolder",
           "group": "navigation",
-          "submenu": "Clipster 📁"
+          "submenu": "Clipster"
         }
       ]
     }
