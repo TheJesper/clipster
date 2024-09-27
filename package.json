@@ -1,6 +1,7 @@
 {
   "name": "clipster",
-  "version": "1.1.18",
+  "displayName": "Clipster",
+  "version": "1.1.19",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "publisher": "jesperwilfing",
@@ -50,7 +51,7 @@
     "commands": [
       {
         "command": "clipster.copyFileContentWithHeader",
-        "title": "📝 Copy File Content with Path",
+        "title": "📝 Copy File Content with Relative Path",
         "category": "Clipster"
       },
       {
