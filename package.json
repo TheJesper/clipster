@@ -1,6 +1,6 @@
 {
   "name": "clipster",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "publisher": "jesperwilfing",
@@ -65,6 +65,16 @@
         "command": "clipster.copyRootFolderPath",
         "title": "📁 Copy Root Folder Path",
         "category": "Clipster"
+      },
+      {
+        "command": "clipster.copyRootFolderStructure",
+        "title": "📁 Copy Root Folder Structure",
+        "category": "Clipster"
+      },
+      {
+        "command": "clipster.copyRootFolderStructureAndContent",
+        "title": "📝 Copy Root Folder Structure and Content",
+        "category": "Clipster"
       }
     ],
     "menus": {
@@ -75,6 +85,21 @@
           "group": "navigation"
         },
         {
+          "command": "clipster.copyRootFolderPath",
+          "when": "explorerResourceIsFile || explorerResourceIsFolder",
+          "group": "navigation"
+        },
+        {
+          "command": "clipster.copyRootFolderStructure",
+          "when": "explorerResourceIsFile || explorerResourceIsFolder",
+          "group": "navigation"
+        },
+        {
+          "command": "clipster.copyRootFolderStructureAndContent",
+          "when": "explorerResourceIsFile || explorerResourceIsFolder",
+          "group": "navigation"
+        },
+        {
           "command": "clipster.copyFolderStructure",
           "when": "explorerResourceIsFolder",
           "group": "navigation"
@@ -82,10 +107,6 @@
         {
           "command": "clipster.copyFolderStructureAndContent",
           "when": "explorerResourceIsFolder",
-          "group": "navigation"
-        },
-        {
-          "command": "clipster.copyRootFolderPath",
           "group": "navigation"
         }
       ]
