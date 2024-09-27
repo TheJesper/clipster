@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.26",
+  "version": "1.1.27",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "publisher": "jesperwilfing",
@@ -39,66 +39,18 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:clipster.copyFileContentWithHeader",
-    "onCommand:clipster.copyFolderStructure",
-    "onCommand:clipster.copyFolderStructureAndContent",
-    "onCommand:clipster.copyRootFolderPath",
-    "onCommand:clipster.copyRootFolderStructure",
-    "onCommand:clipster.copyRootFolderStructureAndContent"
-  ],
   "contributes": {
     "submenus": [
-      {
-        "id": "clipsterMenu",
-        "label": "Clipster"
-      },
       {
         "id": "sparkup.submenu",
         "label": "Sparkup"
       }
     ],
     "menus": {
-      "explorer/context": [
+      "editor/context": [
         {
           "submenu": "sparkup.submenu",
           "group": "sparkup"
-        },
-        {
-          "command": "clipster.copyFileContentWithHeader",
-          "when": "explorerResourceIsFile",
-          "group": "navigation",
-          "submenu": "clipsterMenu"
-        },
-        {
-          "command": "clipster.copyFolderStructure",
-          "when": "explorerResourceIsFolder",
-          "group": "navigation",
-          "submenu": "clipsterMenu"
-        },
-        {
-          "command": "clipster.copyFolderStructureAndContent",
-          "when": "explorerResourceIsFolder",
-          "group": "navigation",
-          "submenu": "clipsterMenu"
-        },
-        {
-          "command": "clipster.copyRootFolderPath",
-          "when": "explorerResourceIsFile || explorerResourceIsFolder",
-          "group": "navigation",
-          "submenu": "clipsterMenu"
-        },
-        {
-          "command": "clipster.copyRootFolderStructure",
-          "when": "explorerResourceIsFile || explorerResourceIsFolder",
-          "group": "navigation",
-          "submenu": "clipsterMenu"
-        },
-        {
-          "command": "clipster.copyRootFolderStructureAndContent",
-          "when": "explorerResourceIsFile || explorerResourceIsFolder",
-          "group": "navigation",
-          "submenu": "clipsterMenu"
         }
       ],
       "sparkup.submenu": [
