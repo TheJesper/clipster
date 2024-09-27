@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.33",
+  "version": "1.1.34",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "activationEvents": [
@@ -37,8 +37,11 @@
   "license": "MIT",
   "devDependencies": {
     "@vscode/vsce": "^2.15.0",
-    "standard-version": "^9.3.2",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "standard-version": "^9.3.2"
+  },
+  "dependencies": {
+    "ignore": "^6.0.2"
   },
   "icon": "resources/icon.png",
   "engines": {
@@ -50,68 +53,61 @@
   "contributes": {
     "commands": [
       {
-        "command": "vscode-menu-test.test1",
-        "title": "Test 1"
+        "command": "clipster.copyFileContentWithHeader",
+        "title": "📝 Copy File Content with Path"
       },
       {
-        "command": "vscode-menu-test.test2",
-        "title": "Test 2"
+        "command": "clipster.copyFolderStructure",
+        "title": "📁 Copy Folder Structure"
       },
       {
-        "command": "vscode-menu-test.test3",
-        "title": "Test 3"
+        "command": "clipster.copyFolderStructureAndContent",
+        "title": "📁 Copy Folder Structure and Content"
       },
       {
-        "command": "vscode-menu-test.test4",
-        "title": "Test 4"
+        "command": "clipster.copyRootFolderPath",
+        "title": "📁 Copy Root Folder Path"
+      },
+      {
+        "command": "clipster.copyRootFolderStructure",
+        "title": "📁 Copy Root Folder Structure"
+      },
+      {
+        "command": "clipster.copyRootFolderStructureAndContent",
+        "title": "📝 Copy Root Folder Structure and Content"
       }
     ],
     "submenus": [
       {
-        "id": "sample.editor.context",
-        "label": "Test"
-      },
-      {
-        "id": "sample.explorer.context",
-        "label": "Test"
+        "id": "clipsterMenu",
+        "label": "Clipster 📁"
       }
     ],
     "menus": {
-      "editor/context": [
-        {
-          "submenu": "sample.editor.context",
-          "group": "test"
-        }
-      ],
       "explorer/context": [
         {
-          "submenu": "sample.explorer.context",
-          "group": "test"
+          "submenu": "clipsterMenu",
+          "group": "navigation"
         }
       ],
-      "sample.editor.context": [
+      "clipsterMenu": [
         {
-          "command": "vscode-menu-test.test1"
+          "command": "clipster.copyFileContentWithHeader"
         },
         {
-          "command": "vscode-menu-test.test2"
+          "command": "clipster.copyFolderStructure"
         },
         {
-          "command": "vscode-menu-test.test3"
+          "command": "clipster.copyFolderStructureAndContent"
         },
         {
-          "command": "vscode-menu-test.test4"
-        }
-      ],
-      "sample.explorer.context": [
-        {
-          "command": "vscode-menu-test.test1"
+          "command": "clipster.copyRootFolderPath"
         },
         {
-          "command": "vscode-menu-test.test2"
+          "command": "clipster.copyRootFolderStructure"
         },
         {
-          "command": "vscode-menu-test.test3"
+          "command": "clipster.copyRootFolderStructureAndContent"
         }
       ]
     }
