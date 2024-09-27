@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.31",
+  "version": "1.1.32",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "activationEvents": [
@@ -46,5 +46,53 @@
   },
   "categories": [
     "Other"
-  ]
+  ],
+  "contributes": {
+    "submenus": [
+      {
+        "id": "clipsterMenu",
+        "label": "Clipster 📁"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "clipster.copyFileContentWithHeader",
+          "when": "explorerResourceIsFile",
+          "group": "navigation",
+          "submenu": "clipsterMenu"
+        },
+        {
+          "command": "clipster.copyFolderStructure",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation",
+          "submenu": "clipsterMenu"
+        },
+        {
+          "command": "clipster.copyFolderStructureAndContent",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation",
+          "submenu": "clipsterMenu"
+        },
+        {
+          "command": "clipster.copyRootFolderPath",
+          "when": "explorerResourceIsFile || explorerResourceIsFolder",
+          "group": "navigation",
+          "submenu": "clipsterMenu"
+        },
+        {
+          "command": "clipster.copyRootFolderStructure",
+          "when": "explorerResourceIsFile || explorerResourceIsFolder",
+          "group": "navigation",
+          "submenu": "clipsterMenu"
+        },
+        {
+          "command": "clipster.copyRootFolderStructureAndContent",
+          "when": "explorerResourceIsFile || explorerResourceIsFolder",
+          "group": "navigation",
+          "submenu": "clipsterMenu"
+        }
+      ]
+    }
+  }
 }
