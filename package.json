@@ -1,6 +1,6 @@
 {
   "name": "clipster",
-  "version": "1.1.14",
+  "version": "1.1.13",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "publisher": "jesperwilfing",
@@ -10,7 +10,8 @@
     "bump-build": "standard-version && yarn build",
     "clean-build-install": "yarn clean && yarn bump-build && yarn install-extension",
     "install-extension": "node ./build.js",
-    "release": "standard-version"
+    "release": "standard-version",
+    "vscode:prepublish": "yarn clean && yarn build"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,7 @@
   },
   "icon": "resources/icon.png",
   "engines": {
-    "vscode": "^1.75.0"
+    "vscode": "^1.80.0"
   },
   "categories": [
     "Other"
@@ -117,7 +118,12 @@
           "group": "navigation",
           "submenu": "Clipster"
         }
-      ]
+      ],
+      "submenus": {
+        "Clipster": {
+          "label": "Clipster"
+        }
+      }
     }
   }
 }
