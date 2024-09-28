@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.127",
+  "version": "1.1.128",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "activationEvents": [
@@ -80,6 +80,11 @@
           "default": true,
           "description": "Enable Copy Root Folder Structure."
         },
+        "clipster.showCopyRootFolderStructureAndContent": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Copy Root Folder Structure and Content."
+        },
         "clipster.showInClipsterSubmenu": {
           "type": "boolean",
           "default": true,
@@ -93,6 +98,10 @@
       }
     },
     "commands": [
+      {
+        "command": "clipster.copyFileContentWithHeader",
+        "title": "📝 Copy File Content with Path"
+      },
       {
         "command": "clipster.copyFolderStructure",
         "title": "📁 Copy Folder Structure"
@@ -112,53 +121,8 @@
       {
         "command": "clipster.copyRootFolderStructureAndContent",
         "title": "📝 Copy Root Folder Structure and Content"
-      },
-      {
-        "command": "clipster.copyFileContentWithHeader",
-        "title": "📝 Copy File Content with Path"
       }
-    ],
-    "submenus": [
-      {
-        "id": "clipsterMenu",
-        "label": "Clipster 📁"
-      }
-    ],
-    "menus": {
-      "explorer/context": [
-        {
-          "submenu": "clipsterMenu",
-          "group": "navigation",
-          "when": "config.clipster.showMenuOptions"
-        }
-      ],
-      "clipsterMenu": [
-        {
-          "command": "clipster.copyFileContentWithHeader",
-          "when": "config.clipster.showCopyFileContentWithHeader"
-        },
-        {
-          "command": "clipster.copyFolderStructure",
-          "when": "config.clipster.showCopyFolderStructure"
-        },
-        {
-          "command": "clipster.copyFolderStructureAndContent",
-          "when": "config.clipster.showCopyFolderStructureAndContent"
-        },
-        {
-          "command": "clipster.copyRootFolderPath",
-          "when": "config.clipster.showCopyRootFolderPath"
-        },
-        {
-          "command": "clipster.copyRootFolderStructure",
-          "when": "config.clipster.showCopyRootFolderStructure"
-        },
-        {
-          "command": "clipster.copyRootFolderStructureAndContent",
-          "when": "config.clipster.showCopyRootFolderStructureAndContent"
-        }
-      ]
-    }
+    ]
   },
   "configurations": {
     "contributes": {
