@@ -1,89 +1,99 @@
-const { commands, window, workspace } = require("vscode");
-const { copyToClipboard } = require("../src/clipboardHelper");
+const { commands, workspace, window } = require("vscode");
+const { copyToClipboard } = require("./clipboardHelper");
 const {
   getFolderStructure,
   getFolderStructureAndContent,
   copyRootFolderPath,
   copyRootFolderStructure,
-  copyFileContentWithPath,
-} = require("../src/fileHelpers");
+} = require("./fileHelpers");
 
+// Register commands in the `activate` function
 const activate = (context) => {
-  context.subscriptions.push(
-    commands.registerCommand(
-      "clipster.copyFileContentWithHeader",
-      async (uri) => {
-        try {
-          const result = await copyFileContentWithPath(uri);
-          await copyToClipboard(result);
-          window.showInformationMessage("File content copied successfully!");
-        } catch (error) {
-          window.showErrorMessage(
-            `Failed to copy file content: ${error.message}`
+  const config = workspace.getConfiguration("clipster");
+  const showMenuOptions = config.get("showMenuOptions", true);
+  const additionalIgnores = config.get("additionalIgnores", []);
+
+  if (showMenuOptions) {
+    if (config.get("showCopyFileContentWithHeader", true)) {
+      context.subscriptions.push(
+        commands.registerCommand(
+          "clipster.copyFileContentWithHeader",
+          async (uri) => {
+            const result = await copyFileContentWithPath(uri);
+            await copyToClipboard(
+              result,
+              "📝 File content with path copied successfully!"
+            );
+          }
+        )
+      );
+    }
+
+    if (config.get("showCopyFolderStructure", true)) {
+      context.subscriptions.push(
+        commands.registerCommand(
+          "clipster.copyFolderStructure",
+          async (uri) => {
+            const result = await getFolderStructure(
+              uri.fsPath,
+              additionalIgnores
+            );
+            await copyToClipboard(
+              result,
+              "📁 Folder structure copied successfully!"
+            );
+          }
+        )
+      );
+    }
+
+    if (config.get("showCopyFolderStructureAndContent", true)) {
+      context.subscriptions.push(
+        commands.registerCommand(
+          "clipster.copyFolderStructureAndContent",
+          async (uri) => {
+            const result = await getFolderStructureAndContent(
+              uri.fsPath,
+              additionalIgnores
+            );
+            await copyToClipboard(
+              result,
+              "📁 Folder structure and content copied successfully!"
+            );
+          }
+        )
+      );
+    }
+
+    if (config.get("showCopyRootFolderPath", true)) {
+      context.subscriptions.push(
+        commands.registerCommand("clipster.copyRootFolderPath", async () => {
+          const result = copyRootFolderPath();
+          await copyToClipboard(
+            result,
+            "📁 Root folder path copied successfully!"
           );
-        }
-      }
-    )
-  );
+        })
+      );
+    }
 
-  context.subscriptions.push(
-    commands.registerCommand("clipster.copyFolderStructure", async (uri) => {
-      try {
-        const result = await getFolderStructure(uri.fsPath);
-        await copyToClipboard(result);
-        window.showInformationMessage("Folder structure copied successfully!");
-      } catch (error) {
-        window.showErrorMessage(
-          `Failed to copy folder structure: ${error.message}`
-        );
-      }
-    })
-  );
-
-  context.subscriptions.push(
-    commands.registerCommand(
-      "clipster.copyFolderStructureAndContent",
-      async (uri) => {
-        try {
-          const result = await getFolderStructureAndContent(uri.fsPath);
-          await copyToClipboard(result);
-          window.showInformationMessage(
-            "Folder structure and content copied successfully!"
-          );
-        } catch (error) {
-          window.showErrorMessage(
-            `Failed to copy folder structure and content: ${error.message}`
-          );
-        }
-      }
-    )
-  );
-
-  context.subscriptions.push(
-    commands.registerCommand("clipster.copyRootFolderPath", async () => {
-      try {
-        const result = copyRootFolderPath();
-        await copyToClipboard(result);
-      } catch (error) {
-        window.showErrorMessage(
-          `Failed to copy root folder path: ${error.message}`
-        );
-      }
-    })
-  );
-
-  context.subscriptions.push(
-    commands.registerCommand("clipster.copyRootFolderStructure", async () => {
-      try {
-        const result = copyRootFolderStructure();
-        await copyToClipboard(result);
-      } catch (error) {
-        window.showErrorMessage(
-          `Failed to copy root folder structure: ${error.message}`
-        );
-      }
-    })
-  );
+    if (config.get("showCopyRootFolderStructure", true)) {
+      context.subscriptions.push(
+        commands.registerCommand(
+          "clipster.copyRootFolderStructure",
+          async () => {
+            const result = copyRootFolderStructure(additionalIgnores);
+            await copyToClipboard(
+              result,
+              "📁 Root folder structure copied successfully!"
+            );
+          }
+        )
+      );
+    }
+  } else {
+    window.showInformationMessage("Clipster menu options are disabled.");
+  }
 };
 
 const deactivate = () => {

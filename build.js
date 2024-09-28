@@ -25,15 +25,21 @@ const mergeContributes = () => {
 // Step 2: Package the VSIX extension
 const packageExtension = () => {
   try {
-    // Ensure output directory exists
+    // Ensure output directory exists after cleaning
     if (!fs.existsSync(outDir)) {
-      fs.mkdirSync(outDir);
+      fs.mkdirSync(outDir, { recursive: true });
     }
 
     // Specify output directory for the package
-    execSync(`vsce package --out ${path.join(outDir, "clipster.vsix")}`, {
-      stdio: "inherit",
-    });
+    const version = JSON.parse(
+      fs.readFileSync(packageJsonPath, "utf8")
+    ).version;
+    execSync(
+      `vsce package --out ${path.join(outDir, `clipster-${version}.vsix`)}`,
+      {
+        stdio: "inherit",
+      }
+    );
     console.log("Extension packaged successfully.");
   } catch (error) {
     console.error("Failed to package extension:", error);

@@ -1,3 +1,4 @@
+// src\clipboardHelper.js
 const { env, window } = require("vscode");
 
 const copyToClipboard = async (
