@@ -134,34 +134,27 @@
       "explorer/context": [
         {
           "submenu": "clipsterMenu",
-          "group": "navigation",
-          "when": "resourceLangId == 'file' || resourceLangId == 'folder'"
+          "group": "navigation"
         }
       ],
       "clipsterMenu": [
         {
-          "command": "clipster.copyFileContentWithHeader",
-          "when": "resourceLangId == 'file' && config.clipster.showCopyFileContentWithHeader"
+          "command": "clipster.copyFileContentWithHeader"
         },
         {
-          "command": "clipster.copyFolderStructure",
-          "when": "resourceLangId == 'folder' && config.clipster.showCopyFolderStructure"
+          "command": "clipster.copyFolderStructure"
         },
         {
-          "command": "clipster.copyFolderStructureAndContent",
-          "when": "resourceLangId == 'folder' && config.clipster.showCopyFolderStructureAndContent"
+          "command": "clipster.copyFolderStructureAndContent"
         },
         {
-          "command": "clipster.copyRootFolderPath",
-          "when": "config.clipster.showCopyRootFolderPath"
+          "command": "clipster.copyRootFolderPath"
         },
         {
-          "command": "clipster.copyRootFolderStructure",
-          "when": "config.clipster.showCopyRootFolderStructure"
+          "command": "clipster.copyRootFolderStructure"
         },
         {
-          "command": "clipster.copyRootFolderStructureAndContent",
-          "when": "config.clipster.showCopyRootFolderStructureAndContent"
+          "command": "clipster.copyRootFolderStructureAndContent"
         }
       ]
     }

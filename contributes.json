@@ -1,4 +1,50 @@
 {
+  "configuration": {
+    "type": "object",
+    "title": "Clipster Settings",
+    "properties": {
+      "clipster.showCopyFileContentWithHeader": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable Copy File Content with Path."
+      },
+      "clipster.showCopyFolderStructure": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable Copy Folder Structure."
+      },
+      "clipster.showCopyFolderStructureAndContent": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable Copy Folder Structure and Content."
+      },
+      "clipster.showCopyRootFolderPath": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable Copy Root Folder Path."
+      },
+      "clipster.showCopyRootFolderStructure": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable Copy Root Folder Structure."
+      },
+      "clipster.showCopyRootFolderStructureAndContent": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable Copy Root Folder Structure and Content."
+      },
+      "clipster.showInClipsterSubmenu": {
+        "type": "boolean",
+        "default": true,
+        "description": "Show Clipster commands in submenu."
+      },
+      "clipster.additionalIgnores": {
+        "type": "array",
+        "default": [],
+        "description": "Additional file patterns to ignore when copying folder structures."
+      }
+    }
+  },
   "commands": [
     {
       "command": "clipster.copyFileContentWithHeader",

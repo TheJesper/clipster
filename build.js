@@ -9,6 +9,7 @@ const outDir = path.join(__dirname, "out"); // Ensure the output directory exist
 
 // Step 1: Merge contributes.json into package.json
 const mergeContributes = () => {
+  console.log("Merging contributes.json into package.json...");
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
   const contributesJson = JSON.parse(
     fs.readFileSync(contributesJsonPath, "utf8")
