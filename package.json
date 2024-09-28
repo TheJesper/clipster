@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.86",
+  "version": "1.1.84",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "activationEvents": [
@@ -15,7 +15,7 @@
   "publisher": "jesperwilfing",
   "scripts": {
     "clean": "rimraf ./out",
-    "build": "node -e \"const fs = require('fs'); const pkg = require('./package.json'); if (!fs.existsSync('./out')) fs.mkdirSync('./out'); require('child_process').execSync('vsce package --out ./out/clipster-' + pkg.version + '.vsix', {stdio: 'inherit'})\"",
+    "build": "vsce package --out ./out/clipster-$(node getVersion.js).vsix",
     "bump-build": "standard-version && npm run build",
     "clean-build-install": "npm run clean && npm run bump-build && npm run install-extension",
     "install-extension": "node ./build.js",
@@ -110,6 +110,17 @@
           "command": "clipster.copyRootFolderStructureAndContent"
         }
       ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Clipster Settings",
+      "properties": {
+        "clipster.showMenuOptions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show Clipster menu options in the context menu."
+        }
+      }
     }
   }
 }
