@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.131",
+  "version": "1.1.132",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "activationEvents": [
@@ -134,26 +134,26 @@
         {
           "submenu": "clipsterMenu",
           "group": "navigation",
-          "when": "resourceLangId != folder && config.clipster.showCopyFileContentWithHeader"
+          "when": "resourceLangId == 'file' && config.clipster.showCopyFileContentWithHeader"
         },
         {
           "submenu": "clipsterMenu",
           "group": "navigation",
-          "when": "resourceLangId == folder && config.clipster.showCopyFolderStructure"
+          "when": "resourceLangId == 'folder' && config.clipster.showCopyFolderStructure"
         }
       ],
       "clipsterMenu": [
         {
           "command": "clipster.copyFileContentWithHeader",
-          "when": "resourceLangId != folder && config.clipster.showCopyFileContentWithHeader"
+          "when": "resourceLangId == 'file' && config.clipster.showCopyFileContentWithHeader"
         },
         {
           "command": "clipster.copyFolderStructure",
-          "when": "resourceLangId == folder && config.clipster.showCopyFolderStructure"
+          "when": "resourceLangId == 'folder' && config.clipster.showCopyFolderStructure"
         },
         {
           "command": "clipster.copyFolderStructureAndContent",
-          "when": "resourceLangId == folder && config.clipster.showCopyFolderStructureAndContent"
+          "when": "resourceLangId == 'folder' && config.clipster.showCopyFolderStructureAndContent"
         },
         {
           "command": "clipster.copyRootFolderPath",
