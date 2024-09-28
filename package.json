@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.130",
+  "version": "1.1.131",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "activationEvents": [
@@ -133,21 +133,27 @@
       "explorer/context": [
         {
           "submenu": "clipsterMenu",
-          "group": "2_copy"
+          "group": "navigation",
+          "when": "resourceLangId != folder && config.clipster.showCopyFileContentWithHeader"
+        },
+        {
+          "submenu": "clipsterMenu",
+          "group": "navigation",
+          "when": "resourceLangId == folder && config.clipster.showCopyFolderStructure"
         }
       ],
       "clipsterMenu": [
         {
           "command": "clipster.copyFileContentWithHeader",
-          "when": "config.clipster.showCopyFileContentWithHeader"
+          "when": "resourceLangId != folder && config.clipster.showCopyFileContentWithHeader"
         },
         {
           "command": "clipster.copyFolderStructure",
-          "when": "config.clipster.showCopyFolderStructure"
+          "when": "resourceLangId == folder && config.clipster.showCopyFolderStructure"
         },
         {
           "command": "clipster.copyFolderStructureAndContent",
-          "when": "config.clipster.showCopyFolderStructureAndContent"
+          "when": "resourceLangId == folder && config.clipster.showCopyFolderStructureAndContent"
         },
         {
           "command": "clipster.copyRootFolderPath",
@@ -170,11 +176,6 @@
         "type": "object",
         "title": "Clipster Settings",
         "properties": {
-          "clipster.showMenuOptions": {
-            "type": "boolean",
-            "default": true,
-            "description": "Show Clipster menu options in the context menu."
-          },
           "clipster.additionalIgnores": {
             "type": "array",
             "default": [],
