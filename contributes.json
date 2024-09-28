@@ -1,0 +1,62 @@
+{
+  "commands": [
+    {
+      "command": "clipster.copyFileContentWithHeader",
+      "title": "📝 Copy File Content with Path"
+    },
+    {
+      "command": "clipster.copyFolderStructure",
+      "title": "📁 Copy Folder Structure"
+    },
+    {
+      "command": "clipster.copyFolderStructureAndContent",
+      "title": "📁 Copy Folder Structure and Content"
+    },
+    {
+      "command": "clipster.copyRootFolderPath",
+      "title": "📁 Copy Root Folder Path"
+    },
+    {
+      "command": "clipster.copyRootFolderStructure",
+      "title": "📁 Copy Root Folder Structure"
+    },
+    {
+      "command": "clipster.copyRootFolderStructureAndContent",
+      "title": "📝 Copy Root Folder Structure and Content"
+    }
+  ],
+  "submenus": [
+    {
+      "id": "clipsterMenu",
+      "label": "Clipster 📁"
+    }
+  ],
+  "menus": {
+    "explorer/context": [
+      {
+        "submenu": "clipsterMenu",
+        "group": "navigation"
+      }
+    ],
+    "clipsterMenu": [
+      {
+        "command": "clipster.copyFileContentWithHeader"
+      },
+      {
+        "command": "clipster.copyFolderStructure"
+      },
+      {
+        "command": "clipster.copyFolderStructureAndContent"
+      },
+      {
+        "command": "clipster.copyRootFolderPath"
+      },
+      {
+        "command": "clipster.copyRootFolderStructure"
+      },
+      {
+        "command": "clipster.copyRootFolderStructureAndContent"
+      }
+    ]
+  }
+}
