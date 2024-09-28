@@ -1,45 +1,41 @@
 const fs = require("fs");
 const path = require("path");
+const os = require("os"); // Add this line to import the 'os' module
 const ignore = require("ignore");
 const { workspace } = require("vscode");
+const { formatStructure, formatRootFolder } = require("./structureFormatter");
 
-// Helper to filter ignored files using the ignore package
+// Helper to load and apply ignore rules using the ignore package
 const filterIgnoredFiles = (dir, files, additionalIgnores) => {
-  const ignoreFilePath = path.join(dir, ".gitignore");
   let ig = ignore();
 
-  if (fs.existsSync(ignoreFilePath)) {
-    const ignoreRules = fs.readFileSync(ignoreFilePath, "utf8");
-    ig = ig.add(ignoreRules);
+  // Add ignore rules from .gitignore and .vscodeignore if present
+  const gitIgnorePath = path.join(dir, ".gitignore");
+  if (fs.existsSync(gitIgnorePath)) {
+    const gitIgnoreRules = fs.readFileSync(gitIgnorePath, "utf8");
+    ig = ig.add(gitIgnoreRules);
+  }
+  const vscodeIgnorePath = path.join(dir, ".vscodeignore");
+  if (fs.existsSync(vscodeIgnorePath)) {
+    const vscodeIgnoreRules = fs.readFileSync(vscodeIgnorePath, "utf8");
+    ig = ig.add(vscodeIgnoreRules);
   }
 
+  // Add custom additional ignores from settings
   if (additionalIgnores && additionalIgnores.length > 0) {
     ig = ig.add(additionalIgnores);
   }
 
-  return ig.filter(files);
-};
-
-// Function to get relative path if available, otherwise absolute path
-const getRelativeOrAbsolutePath = (filePath) => {
-  const workspaceFolder = workspace.workspaceFolders?.[0]?.uri?.fsPath;
-  if (workspaceFolder && filePath.startsWith(workspaceFolder)) {
-    return path.relative(workspaceFolder, filePath);
-  }
-  return filePath;
-};
-
-// Helper to format the folder structure correctly
-const formatStructure = (name, type, indent) => {
-  if (type === "folder") {
-    return `${indent}📂 ${name}\n`;
-  } else {
-    return `${indent}📄 ${name}\n`;
-  }
+  return files.filter((file) => !ig.ignores(file)); // Keep files that should not be ignored
 };
 
 // Traverse folder structure, display folders first, and sort alphabetically
-const traverseDirectory = (dir, additionalIgnores = [], indent = "┣ ") => {
+const traverseDirectory = (
+  dir,
+  additionalIgnores = [],
+  indent = "",
+  isLast = false
+) => {
   let structure = "";
 
   // Get entries and apply filtering
@@ -59,19 +55,29 @@ const traverseDirectory = (dir, additionalIgnores = [], indent = "┣ ") => {
     .sort();
 
   // Traverse directories first
-  for (const directory of directories) {
-    structure += formatStructure(directory, "folder", indent);
+  directories.forEach((directory, index) => {
+    const isLastDir = index === directories.length - 1 && files.length === 0;
+    const hasChildren = fs.readdirSync(path.join(dir, directory)).length > 0;
+    structure += formatStructure(
+      directory,
+      "folder",
+      indent,
+      isLastDir,
+      hasChildren
+    );
     structure += traverseDirectory(
       path.join(dir, directory),
       additionalIgnores,
-      `${indent}┃ `
+      `${indent}${isLastDir ? "  " : "┃ "}`,
+      isLastDir
     );
-  }
+  });
 
   // Traverse files
-  for (const file of files) {
-    structure += formatStructure(file, "file", indent);
-  }
+  files.forEach((file, index) => {
+    const isLastFile = index === files.length - 1;
+    structure += formatStructure(file, "file", indent, isLastFile, false);
+  });
 
   return structure;
 };
@@ -79,81 +85,17 @@ const traverseDirectory = (dir, additionalIgnores = [], indent = "┣ ") => {
 // Function to get the folder structure
 const getFolderStructure = (dir, additionalIgnores = []) => {
   const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
-  const rootFolderName = path.basename(rootPath);
-  const relativeOrAbsolutePath = getRelativeOrAbsolutePath(dir);
+  const absolutePath = path.resolve(dir);
+  const folderName = path.basename(dir);
 
-  let structure = `📦 ${rootFolderName}\n 📂 ${relativeOrAbsolutePath}\n`;
+  // Format the root folder with absolute path and name of the current folder
+  let structure = formatRootFolder(path.basename(rootPath), absolutePath);
+  structure += `📂 ${folderName}${os.EOL}`; // Include folder name
   structure += traverseDirectory(dir, additionalIgnores);
-  return structure;
-};
-
-// Function to get the folder structure and file contents
-const getFolderStructureAndContent = (
-  dir,
-  additionalIgnores = [],
-  indent = "┣ "
-) => {
-  const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
-  const rootFolderName = path.basename(rootPath);
-  let structure = `📦 ${rootFolderName}\n`;
-
-  const processDirectory = (dir, currentIndent) => {
-    let entries = fs.readdirSync(dir, { withFileTypes: true });
-    entries = filterIgnoredFiles(
-      dir,
-      entries.map((e) => e.name),
-      additionalIgnores
-    );
-
-    // Sort and separate directories and files
-    const directories = entries
-      .filter((entry) => fs.statSync(path.join(dir, entry)).isDirectory())
-      .sort();
-    const files = entries
-      .filter((entry) => fs.statSync(path.join(dir, entry)).isFile())
-      .sort();
-
-    // Process directories first
-    for (const directory of directories) {
-      structure += `${currentIndent}📂 ${directory}\n`;
-      structure += processDirectory(
-        path.join(dir, directory),
-        `${currentIndent}┃ `
-      );
-    }
-
-    // Process files with content
-    for (const file of files) {
-      const filePath = path.join(dir, file);
-      const content = fs.readFileSync(filePath, "utf8");
-      structure += `${currentIndent}📄 ${file}\nContent:\n${content}\n\n`;
-    }
-  };
-
-  processDirectory(dir, indent);
-  return structure;
-};
-
-// Function to copy the root folder path
-const copyRootFolderPath = () => {
-  const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
-  return `📦 ${path.basename(rootPath)}\nPath: ${rootPath}`;
-};
-
-// Function to copy the root folder structure
-const copyRootFolderStructure = (additionalIgnores = []) => {
-  const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
-  const rootFolderName = path.basename(rootPath);
-
-  let structure = `📦 ${rootFolderName}\n`;
-  structure += traverseDirectory(rootPath, additionalIgnores);
   return structure;
 };
 
 // Export the functions
 module.exports = {
   getFolderStructure,
-  getFolderStructureAndContent,
-  copyRootFolderPath,
-  copyRootFolderStructure,
 };
