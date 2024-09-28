@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.103",
+  "version": "1.1.104",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "main": "src/extension.js",
   "activationEvents": [
@@ -16,7 +16,9 @@
   "scripts": {
     "clean": "rimraf ./out",
     "build": "npm run clean && node getVersion.js && node -e \"const fs = require('fs'); const version = fs.readFileSync('.version', 'utf8').trim(); require('child_process').execSync(`vsce package --out ./out/clipster-${version}.vsix`, {stdio: 'inherit'})\"",
-    "bump-build": "standard-version && npm run build",
+    "bump-version": "standard-version --no-tag",
+    "create-tag": "git tag -a v$(node -p 'require(\"./package.json\").version') -m 'chore(release): $(node -p 'require(\"./package.json\").version')'",
+    "bump-build": "npm run bump-version && npm run create-tag && npm run build",
     "clean-build-install": "npm run clean && npm run bump-build && npm run install-extension",
     "install-extension": "node ./build.js",
     "release": "standard-version"
