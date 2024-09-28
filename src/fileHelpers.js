@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const os = require("os"); // Add this line to import the 'os' module
+const os = require("os"); // Make sure os is imported here
 const ignore = require("ignore");
 const { workspace } = require("vscode");
 const { formatStructure, formatRootFolder } = require("./structureFormatter");
@@ -95,7 +95,24 @@ const getFolderStructure = (dir, additionalIgnores = []) => {
   return structure;
 };
 
+// Function to copy the root folder path
+const copyRootFolderPath = () => {
+  const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
+  if (rootPath) {
+    return rootPath; // Return the root folder path
+  }
+  return null;
+};
+
+// Function to get root folder structure
+const copyRootFolderStructure = (additionalIgnores = []) => {
+  const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
+  return getFolderStructure(rootPath, additionalIgnores);
+};
+
 // Export the functions
 module.exports = {
   getFolderStructure,
+  copyRootFolderPath,
+  copyRootFolderStructure,
 };
