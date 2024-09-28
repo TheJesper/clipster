@@ -128,7 +128,7 @@
       "explorer/context": [
         {
           "submenu": "clipsterMenu",
-          "group": "2_copy",
+          "group": "navigation",
           "when": "config.clipster.showMenuOptions"
         }
       ],
