@@ -82,7 +82,7 @@ const getFolderStructure = (dir, additionalIgnores = []) => {
   const rootFolderName = path.basename(rootPath);
   const relativeOrAbsolutePath = getRelativeOrAbsolutePath(dir);
 
-  let structure = `📦 ${rootFolderName}\n📄 ${relativeOrAbsolutePath}\n`;
+  let structure = `📦 ${rootFolderName}\n 📂 ${relativeOrAbsolutePath}\n`;
   structure += traverseDirectory(dir, additionalIgnores);
   return structure;
 };
@@ -93,7 +93,10 @@ const getFolderStructureAndContent = (
   additionalIgnores = [],
   indent = "┣ "
 ) => {
-  let structure = getFolderStructure(dir, additionalIgnores);
+  const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
+  const rootFolderName = path.basename(rootPath);
+  let structure = `📦 ${rootFolderName}\n`;
+
   const processDirectory = (dir, currentIndent) => {
     let entries = fs.readdirSync(dir, { withFileTypes: true });
     entries = filterIgnoredFiles(
@@ -131,8 +134,26 @@ const getFolderStructureAndContent = (
   return structure;
 };
 
+// Function to copy the root folder path
+const copyRootFolderPath = () => {
+  const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
+  return `📦 ${path.basename(rootPath)}\nPath: ${rootPath}`;
+};
+
+// Function to copy the root folder structure
+const copyRootFolderStructure = (additionalIgnores = []) => {
+  const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
+  const rootFolderName = path.basename(rootPath);
+
+  let structure = `📦 ${rootFolderName}\n`;
+  structure += traverseDirectory(rootPath, additionalIgnores);
+  return structure;
+};
+
 // Export the functions
 module.exports = {
   getFolderStructure,
   getFolderStructureAndContent,
+  copyRootFolderPath,
+  copyRootFolderStructure,
 };

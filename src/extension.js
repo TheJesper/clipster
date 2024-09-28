@@ -9,6 +9,7 @@ const {
 
 let disposables = [];
 
+// Register commands function
 const registerCommands = () => {
   console.log("Registering Clipster commands...");
   const config = workspace.getConfiguration("clipster");
@@ -50,14 +51,26 @@ const registerCommands = () => {
       commands.registerCommand(
         "clipster.copyFolderStructureAndContent",
         async (uri) => {
-          const result = await getFolderStructureAndContent(
-            uri.fsPath,
-            additionalIgnores
-          );
-          await copyToClipboard(
-            result,
-            "📁 Folder structure and content copied successfully!"
-          );
+          try {
+            const result = await getFolderStructureAndContent(
+              uri.fsPath,
+              additionalIgnores
+            );
+            if (result) {
+              await copyToClipboard(
+                result,
+                "📁 Folder structure and content copied successfully!"
+              );
+            } else {
+              window.showErrorMessage(
+                "Failed to retrieve folder structure and content."
+              );
+            }
+          } catch (error) {
+            window.showErrorMessage(
+              `Error copying folder structure and content: ${error.message}`
+            );
+          }
         }
       )
     );
@@ -88,15 +101,15 @@ const registerCommands = () => {
   }
 };
 
+// Activation function
 const activate = (context) => {
-  // Show activation message
-  console.log("Activating Clipster..."); // Ensure this gets logged
+  console.log("Activating Clipster..."); // Log activation for debugging
   window.showInformationMessage("Clipster extension activated successfully!");
 
   // Register initial commands based on current configuration
   registerCommands();
 
-  // Listen for configuration changes
+  // Listen for configuration changes and re-register commands accordingly
   context.subscriptions.push(
     workspace.onDidChangeConfiguration((event) => {
       if (event.affectsConfiguration("clipster")) {
@@ -113,6 +126,7 @@ const activate = (context) => {
   );
 };
 
+// Deactivation function
 const deactivate = () => {
   console.log("Clipster extension deactivated.");
 };
