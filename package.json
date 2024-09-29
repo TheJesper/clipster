@@ -1,8 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.190",
-  "type": "module",
+  "version": "1.1.191",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "activationEvents": [
     "onStartupFinished",
@@ -24,190 +23,14 @@
     "install-extension": "node build.js",
     "release": "standard-version"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/TheJesper/clipster"
-  },
-  "keywords": [
-    "vscode",
-    "extension",
-    "clipboard",
-    "root path",
-    "folder structure",
-    "file content"
-  ],
-  "author": "jesperwilfing",
-  "license": "MIT",
   "devDependencies": {
     "@vscode/vsce": "^2.15.0",
     "chai": "^5.1.1",
     "mocha": "^10.7.3",
-    "mock-fs": "^5.3.0",
     "rimraf": "^3.0.2",
-    "sinon": "^19.0.2",
     "standard-version": "^9.3.2"
   },
-  "icon": "resources/icon.png",
   "engines": {
     "vscode": "^1.80.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "contributes": {
-    "configuration": {
-      "type": "object",
-      "title": "Clipster Settings",
-      "properties": {
-        "clipster.showCopyFileContentWithHeader": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable Copy File Content with Path."
-        },
-        "clipster.showCopyFolderStructure": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable Copy Folder Structure."
-        },
-        "clipster.showCopyFolderStructureAndContent": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable Copy Folder Structure and Content."
-        },
-        "clipster.showCopyRootFolderPath": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable Copy Root Folder Path."
-        },
-        "clipster.showCopyRootFolderStructure": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable Copy Root Folder Structure."
-        },
-        "clipster.showCopyRootFolderStructureAndContent": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable Copy Root Folder Structure and Content."
-        },
-        "clipster.showInClipsterSubmenu": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show Clipster commands in submenu."
-        },
-        "clipster.additionalIgnores": {
-          "type": "array",
-          "default": [],
-          "description": "Additional file patterns to ignore when copying folder structures."
-        }
-      }
-    },
-    "commands": [
-      {
-        "command": "clipster.copyFileContentWithHeader",
-        "title": "📝 Copy File Content with Path"
-      },
-      {
-        "command": "clipster.copyFolderStructure",
-        "title": "📁 Copy Folder Structure"
-      },
-      {
-        "command": "clipster.copyFolderStructureAndContent",
-        "title": "📁 Copy Folder Structure and Content"
-      },
-      {
-        "command": "clipster.copyRootFolderPath",
-        "title": "📁 Copy Root Folder Path"
-      },
-      {
-        "command": "clipster.copyRootFolderStructure",
-        "title": "📁 Copy Root Folder Structure"
-      },
-      {
-        "command": "clipster.copyRootFolderStructureAndContent",
-        "title": "📝 Copy Root Folder Structure and Content"
-      }
-    ],
-    "submenus": [
-      {
-        "id": "clipsterMenu",
-        "label": "Clipster 📁"
-      }
-    ],
-    "menus": {
-      "explorer/context": [
-        {
-          "submenu": "clipsterMenu",
-          "group": "navigation"
-        }
-      ],
-      "clipsterMenu": [
-        {
-          "command": "clipster.copyFileContentWithHeader"
-        },
-        {
-          "command": "clipster.copyFolderStructure"
-        },
-        {
-          "command": "clipster.copyFolderStructureAndContent"
-        },
-        {
-          "command": "clipster.copyRootFolderPath"
-        },
-        {
-          "command": "clipster.copyRootFolderStructure"
-        },
-        {
-          "command": "clipster.copyRootFolderStructureAndContent"
-        }
-      ]
-    }
-  },
-  "configurations": {
-    "contributes": {
-      "configuration": {
-        "type": "object",
-        "title": "Clipster Settings",
-        "properties": {
-          "clipster.additionalIgnores": {
-            "type": "array",
-            "default": [],
-            "description": "Additional ignore patterns for folder structure."
-          },
-          "clipster.showCopyFileContentWithHeader": {
-            "type": "boolean",
-            "default": true,
-            "description": "Show 'Copy File Content with Path' option."
-          },
-          "clipster.showCopyFolderStructure": {
-            "type": "boolean",
-            "default": true,
-            "description": "Show 'Copy Folder Structure' option."
-          },
-          "clipster.showCopyFolderStructureAndContent": {
-            "type": "boolean",
-            "default": true,
-            "description": "Show 'Copy Folder Structure and Content' option."
-          },
-          "clipster.showCopyRootFolderPath": {
-            "type": "boolean",
-            "default": true,
-            "description": "Show 'Copy Root Folder Path' option."
-          },
-          "clipster.showCopyRootFolderStructure": {
-            "type": "boolean",
-            "default": true,
-            "description": "Show 'Copy Root Folder Structure' option."
-          },
-          "clipster.showCopyRootFolderStructureAndContent": {
-            "type": "boolean",
-            "default": true,
-            "description": "Show 'Copy Root Folder Structure and Content' option."
-          }
-        }
-      }
-    }
-  },
-  "dependencies": {
-    "ignore": "^6.0.2"
   }
 }
