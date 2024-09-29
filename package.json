@@ -1,7 +1,8 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.179",
+  "version": "1.1.180",
+  "type": "module",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "activationEvents": [
     "onStartupFinished",
@@ -15,8 +16,9 @@
   "main": "./src/extension.js",
   "publisher": "jesperwilfing",
   "scripts": {
+    "test": "mocha --recursive --experimental-specifier-resolution=node",
+    "build": "npm run clean && npm test && node -e \"const version = require('./package.json').version; require('fs').mkdirSync('./out', {recursive: true}); require('child_process').execSync(`vsce package --out ./out/clipster-${version}.vsix`, {stdio: 'inherit'})\"",
     "clean": "rimraf ./out",
-    "build": "npm run clean && node -e \"const version = require('./package.json').version; require('fs').mkdirSync('./out', {recursive: true}); require('child_process').execSync(`vsce package --out ./out/clipster-${version}.vsix`, {stdio: 'inherit'})\"",
     "bump-build": "standard-version --no-verify && npm run build",
     "clean-build-install": "npm run clean && npm run bump-build && npm run install-extension",
     "install-extension": "node ./build.js",
@@ -38,7 +40,12 @@
   "license": "MIT",
   "devDependencies": {
     "@vscode/vsce": "^2.15.0",
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3",
+    "mock-fs": "^5.3.0",
+    "mock-require": "^3.0.3",
     "rimraf": "^3.0.2",
+    "sinon": "^19.0.2",
     "standard-version": "^9.3.2"
   },
   "icon": "resources/icon.png",
