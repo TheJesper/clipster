@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.183",
+  "version": "1.1.184",
   "type": "module",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "activationEvents": [
@@ -17,11 +17,11 @@
   "publisher": "jesperwilfing",
   "scripts": {
     "test": "mocha --recursive --experimental-specifier-resolution=node",
-    "build": "npm run clean && npm test && node -e \"const version = require('./package.json').version; require('fs').mkdirSync('./out', {recursive: true}); require('child_process').execSync(`vsce package --out ./out/clipster-${version}.vsix`, {stdio: 'inherit'})\"",
+    "build": "npm run clean && npm test && node build.js",
     "clean": "rimraf ./out",
     "bump-build": "standard-version --no-verify && npm run build",
     "clean-build-install": "npm run clean && npm run bump-build && npm run install-extension",
-    "install-extension": "node ./build.js",
+    "install-extension": "node build.js",
     "release": "standard-version"
   },
   "repository": {
