@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.193",
+  "version": "1.1.194",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "activationEvents": [
     "onStartupFinished",
@@ -13,6 +13,10 @@
     "onCommand:clipster.copyRootFolderStructureAndContent"
   ],
   "main": "./src/extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheJesper/clipster.git"
+  },
   "publisher": "jesperwilfing",
   "scripts": {
     "test": "mocha --recursive --experimental-specifier-resolution=node",
