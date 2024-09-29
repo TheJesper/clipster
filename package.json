@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.195",
+  "version": "1.1.196",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "activationEvents": [
     "onStartupFinished",
@@ -144,5 +144,8 @@
         }
       ]
     }
+  },
+  "dependencies": {
+    "picomatch": "^4.0.2"
   }
 }
