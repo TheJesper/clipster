@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.198",
+  "version": "1.1.199",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "activationEvents": [
     "onStartupFinished",
@@ -12,14 +12,24 @@
     "onCommand:clipster.copyRootFolderStructure",
     "onCommand:clipster.copyRootFolderStructureAndContent"
   ],
+  "type": "module",
   "main": "./src/extension.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/TheJesper/clipster.git"
   },
   "publisher": "jesperwilfing",
+  "mocha": {
+    "require": [
+      "esm"
+    ],
+    "extensions": [
+      "js",
+      "mjs"
+    ]
+  },
   "scripts": {
-    "test": "mocha --recursive --experimental-specifier-resolution=node",
+    "test": "mocha --require esm --recursive test/**/*.test.js",
     "build": "npm run clean && npm test && node build.js",
     "clean": "rimraf ./out",
     "bump-build": "standard-version --no-verify && npm run build",
@@ -28,9 +38,14 @@
     "release": "standard-version"
   },
   "devDependencies": {
+    "@types/vscode": "^1.93.0",
+    "@vscode/test-electron": "^2.4.1",
     "@vscode/vsce": "^2.15.0",
     "chai": "^5.1.1",
+    "esm": "^3.2.25",
     "mocha": "^10.7.3",
+    "mock-fs": "^5.3.0",
+    "mock-require": "^3.0.3",
     "rimraf": "^3.0.2",
     "standard-version": "^9.3.2"
   },
