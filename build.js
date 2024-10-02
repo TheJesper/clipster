@@ -1,14 +1,14 @@
 // build.js
-import { execSync } from "child_process";
-import {
+const { execSync } = require("child_process");
+const {
   mkdirSync,
   readFileSync,
   writeFileSync,
   existsSync,
   readdirSync,
   statSync,
-} from "fs";
-import path from "path";
+} = require("fs");
+const path = require("path");
 
 // Paths to package.json and contributes.json
 const packageJsonPath = path.join(path.resolve(), "package.json");

@@ -83,3 +83,32 @@ export const getFolderStructure = (dir, additionalIgnores = []) => {
   structure += traverseDirectory(dir, workspaceRoot, additionalIgnores);
   return structure;
 };
+
+// Function to get folder structure and content (dummy example for now)
+export const getFolderStructureAndContent = (dir, additionalIgnores = []) => {
+  const folderStructure = getFolderStructure(dir, additionalIgnores);
+  return folderStructure; // Modify logic as per requirement
+};
+
+// Function to copy file content with path (dummy example for now)
+export const copyFileContentWithPath = (uri) => {
+  const filePath = uri.fsPath;
+  const fileContent = fs.readFileSync(filePath, "utf-8");
+  return `${filePath}${os.EOL}${fileContent}`;
+};
+
+// Function to copy root folder path
+export const copyRootFolderPath = () => {
+  const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath;
+  return workspaceRoot
+    ? `📁 Root Path: ${workspaceRoot}`
+    : "No workspace root found.";
+};
+
+// Function to copy root folder structure
+export const copyRootFolderStructure = (additionalIgnores = []) => {
+  const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath;
+  return workspaceRoot
+    ? getFolderStructure(workspaceRoot, additionalIgnores)
+    : "No workspace root found.";
+};

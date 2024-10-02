@@ -3,18 +3,18 @@ import path from "path";
 import { fileURLToPath, pathToFileURL } from "url";
 import { runTests } from "@vscode/test-electron";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const fileName = fileURLToPath(import.meta.url);
+const dirName = path.dirname(fileName);
 
 async function main() {
   try {
-    const extensionDevelopmentPath = path.resolve(__dirname, "../");
-    const extensionTestsPath = path.resolve(__dirname, "./suite/index.js");
+    const extensionDevelopmentPath = path.resolve(dirName, "../");
+    const extensionTestsPath = path.resolve(dirName, "./suite/index.js");
 
     // Generate a unique user data directory path based on the current time
     const timestamp = Date.now();
     const userDataDir = path.resolve(
-      __dirname,
+      dirName,
       `./.vscode-test-userdata-${timestamp}`
     );
 

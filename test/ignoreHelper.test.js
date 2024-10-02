@@ -7,8 +7,8 @@ import { filterIgnoredFiles } from "../src/ignoreHelper.js";
 import mockFs from "mock-fs";
 import { describe, it, beforeEach, afterEach } from "mocha";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const fileName = fileURLToPath(import.meta.url);
+const dirName = dirname(fileName);
 
 describe("Ignore Helper Tests", () => {
   beforeEach(() => {
@@ -58,7 +58,7 @@ describe("Ignore Helper Tests", () => {
         "clipster.vsix": "",
       },
       // Mock the workspace directory used in tests
-      [path.join(__dirname, "workspace")]: {
+      [path.join(dirName, "workspace")]: {
         "index.js": "",
         "app.vsix": "",
         "server.log": "",
@@ -122,7 +122,7 @@ describe("Ignore Helper Tests", () => {
   });
 
   it("should ignore specific file types like *.vsix, *.log, and exclude specific folders", () => {
-    const dir = path.join(__dirname, "workspace");
+    const dir = path.join(dirName, "workspace");
     const files = [
       "index.js",
       "app.vsix",
@@ -138,7 +138,7 @@ describe("Ignore Helper Tests", () => {
   });
 
   it("should include only necessary files from node_modules and exclude others", () => {
-    const dir = path.join(__dirname, "workspace");
+    const dir = path.join(dirName, "workspace");
     const files = [
       "index.js",
       "node_modules/file1.js",
@@ -156,7 +156,7 @@ describe("Ignore Helper Tests", () => {
   });
 
   it("should handle hidden files and system files like .DS_Store", () => {
-    const dir = path.join(__dirname, "workspace");
+    const dir = path.join(dirName, "workspace");
     const files = ["index.js", ".DS_Store", ".gitignore", "README.md"];
     const additionalIgnores = [".DS_Store", ".gitignore"];
 
@@ -165,7 +165,7 @@ describe("Ignore Helper Tests", () => {
   });
 
   it("should apply both .gitignore, .vscodeignore, and additional settings", () => {
-    const dir = path.join(__dirname, "workspace");
+    const dir = path.join(dirName, "workspace");
     const files = [
       "file1.js",
       "file2.txt",
@@ -192,7 +192,7 @@ describe("Ignore Helper Tests", () => {
   });
 
   it("should handle complex patterns in additional ignore settings", () => {
-    const dir = path.join(__dirname, "workspace");
+    const dir = path.join(dirName, "workspace");
     const files = [
       "src/main.js",
       "lib/library.js",

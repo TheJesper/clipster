@@ -129,7 +129,7 @@ function activate(context) {
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((event) => {
       if (event.affectsConfiguration("clipster")) {
-        registerCommands();
+        registerCommands(); // Re-register commands when configuration changes
       }
     })
   );
