@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.226",
+  "version": "1.1.227",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "icon": "resources/icon.png",
   "activationEvents": [
@@ -20,7 +20,7 @@
   },
   "publisher": "jesperwilfing",
   "scripts": {
-    "test": "mocha --require esm --recursive src/**/test/*.test.js",
+    "test": "mocha --require @babel/register --recursive src/**/test/*.test.js",
     "webpack": "webpack --mode development",
     "build": "webpack --config webpack.config.cjs --mode production --devtool hidden-source-map",
     "clean": "rimraf ./dist",
@@ -30,9 +30,10 @@
     "release": "standard-version"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.3",
-    "@babel/preset-env": "^7.24.3",
+    "@babel/core": "^7.25.7",
+    "@babel/preset-env": "^7.25.7",
     "@babel/preset-react": "^7.25.7",
+    "@babel/register": "^7.25.7",
     "@types/vscode": "^1.93.0",
     "@vscode/test-electron": "^2.4.1",
     "@vscode/vsce": "^2.15.0",
