@@ -1,25 +1,31 @@
-const { execSync } = require("child_process");
-const fs = require("fs");
-const path = require("path");
+// build.js
+import { execSync } from "child_process";
+import {
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  readdirSync,
+  statSync,
+} from "fs";
+import path from "path";
 
 // Paths to package.json and contributes.json
-const packageJsonPath = path.join(__dirname, "package.json");
-const contributesJsonPath = path.join(__dirname, "contributes.json");
-const outDir = path.join(__dirname, "out"); // Ensure the output directory exists
+const packageJsonPath = path.join(path.resolve(), "package.json");
+const contributesJsonPath = path.join(path.resolve(), "contributes.json");
+const outDir = path.join(path.resolve(), "out"); // Ensure the output directory exists
 
 // Step 1: Merge contributes.json into package.json
 const mergeContributes = () => {
   console.log("Merging contributes.json into package.json...");
-  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
-  const contributesJson = JSON.parse(
-    fs.readFileSync(contributesJsonPath, "utf8")
-  );
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+  const contributesJson = JSON.parse(readFileSync(contributesJsonPath, "utf8"));
 
   // Merge contributes section
   packageJson.contributes = contributesJson;
 
   // Write updated package.json back to disk
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+  writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
   console.log("Contributes section merged into package.json.");
 };
 
@@ -27,14 +33,12 @@ const mergeContributes = () => {
 const packageExtension = () => {
   try {
     // Ensure output directory exists after cleaning
-    if (!fs.existsSync(outDir)) {
-      fs.mkdirSync(outDir, { recursive: true });
+    if (!existsSync(outDir)) {
+      mkdirSync(outDir, { recursive: true });
     }
 
     // Specify output directory for the package
-    const version = JSON.parse(
-      fs.readFileSync(packageJsonPath, "utf8")
-    ).version;
+    const version = JSON.parse(readFileSync(packageJsonPath, "utf8")).version;
     execSync(
       `vsce package --out ${path.join(outDir, `clipster-${version}.vsix`)}`,
       {
@@ -50,9 +54,9 @@ const packageExtension = () => {
 
 // Step 3: Install the latest VSIX file from the 'out' directory
 const installLatestVsix = () => {
-  const vsixFiles = fs
-    .readdirSync(outDir)
-    .filter((file) => file.endsWith(".vsix"));
+  const vsixFiles = readdirSync(outDir).filter((file) =>
+    file.endsWith(".vsix")
+  );
 
   if (vsixFiles.length === 0) {
     console.error("No .vsix files found in 'out' directory.");
@@ -61,8 +65,8 @@ const installLatestVsix = () => {
 
   // Sort the files by last modified time
   vsixFiles.sort((a, b) => {
-    const aTime = fs.statSync(path.join(outDir, a)).mtime;
-    const bTime = fs.statSync(path.join(outDir, b)).mtime;
+    const aTime = statSync(path.join(outDir, a)).mtime;
+    const bTime = statSync(path.join(outDir, b)).mtime;
     return bTime - aTime;
   });
 

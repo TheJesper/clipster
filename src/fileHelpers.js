@@ -1,37 +1,15 @@
-const fs = require("fs");
-const path = require("path");
-const os = require("os"); // Make sure os is imported here
-const ignore = require("ignore");
-const { workspace } = require("vscode");
-const { formatStructure, formatRootFolder } = require("./structureFormatter");
-
-// Helper to load and apply ignore rules using the ignore package
-const filterIgnoredFiles = (dir, files, additionalIgnores) => {
-  let ig = ignore();
-
-  // Add ignore rules from .gitignore and .vscodeignore if present
-  const gitIgnorePath = path.join(dir, ".gitignore");
-  if (fs.existsSync(gitIgnorePath)) {
-    const gitIgnoreRules = fs.readFileSync(gitIgnorePath, "utf8");
-    ig = ig.add(gitIgnoreRules);
-  }
-  const vscodeIgnorePath = path.join(dir, ".vscodeignore");
-  if (fs.existsSync(vscodeIgnorePath)) {
-    const vscodeIgnoreRules = fs.readFileSync(vscodeIgnorePath, "utf8");
-    ig = ig.add(vscodeIgnoreRules);
-  }
-
-  // Add custom additional ignores from settings
-  if (additionalIgnores && additionalIgnores.length > 0) {
-    ig = ig.add(additionalIgnores);
-  }
-
-  return files.filter((file) => !ig.ignores(file)); // Keep files that should not be ignored
-};
+// src/fileHelpers.js
+import fs from "fs";
+import path from "path";
+import * as vscode from "vscode";
+import { formatStructure, formatRootFolder } from "./structureFormatter.js";
+import { filterIgnoredFiles } from "./ignoreHelper.js";
+import os from "os";
 
 // Traverse folder structure, display folders first, and sort alphabetically
 const traverseDirectory = (
   dir,
+  workspaceRoot,
   additionalIgnores = [],
   indent = "",
   isLast = false
@@ -40,10 +18,15 @@ const traverseDirectory = (
 
   // Get entries and apply filtering
   let entries = fs.readdirSync(dir, { withFileTypes: true });
+
+  // Filter files based on ignore patterns
   entries = filterIgnoredFiles(
     dir,
     entries.map((e) => e.name),
-    additionalIgnores
+    workspaceRoot,
+    additionalIgnores,
+    fs,
+    path
   );
 
   // Separate directories and files and sort them alphabetically
@@ -67,6 +50,7 @@ const traverseDirectory = (
     );
     structure += traverseDirectory(
       path.join(dir, directory),
+      workspaceRoot,
       additionalIgnores,
       `${indent}${isLastDir ? "  " : "┃ "}`,
       isLastDir
@@ -83,36 +67,19 @@ const traverseDirectory = (
 };
 
 // Function to get the folder structure
-const getFolderStructure = (dir, additionalIgnores = []) => {
-  const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
+export const getFolderStructure = (dir, additionalIgnores = []) => {
+  const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath;
   const absolutePath = path.resolve(dir);
   const folderName = path.basename(dir);
 
+  // Log and show notification with root path
+  const message = `💥 Root Path: ${workspaceRoot}`;
+  console.log(message);
+  vscode.window.showInformationMessage(message);
+
   // Format the root folder with absolute path and name of the current folder
-  let structure = formatRootFolder(path.basename(rootPath), absolutePath);
+  let structure = formatRootFolder(path.basename(workspaceRoot), absolutePath);
   structure += `📂 ${folderName}${os.EOL}`; // Include folder name
-  structure += traverseDirectory(dir, additionalIgnores);
+  structure += traverseDirectory(dir, workspaceRoot, additionalIgnores);
   return structure;
-};
-
-// Function to copy the root folder path
-const copyRootFolderPath = () => {
-  const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
-  if (rootPath) {
-    return rootPath; // Return the root folder path
-  }
-  return null;
-};
-
-// Function to get root folder structure
-const copyRootFolderStructure = (additionalIgnores = []) => {
-  const rootPath = workspace.workspaceFolders?.[0]?.uri?.fsPath;
-  return getFolderStructure(rootPath, additionalIgnores);
-};
-
-// Export the functions
-module.exports = {
-  getFolderStructure,
-  copyRootFolderPath,
-  copyRootFolderStructure,
 };

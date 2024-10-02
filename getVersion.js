@@ -1,4 +1,5 @@
-// src\getVersion.js
-const fs = require("fs");
-const packageJson = require("./package.json");
-fs.writeFileSync(".version", packageJson.version);
+// src/getVersion.js
+import { writeFileSync } from "fs";
+import packageJson from "./package.json" assert { type: "json" };
+
+writeFileSync(".version", packageJson.version);

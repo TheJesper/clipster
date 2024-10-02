@@ -1,17 +1,15 @@
-// src\clipboardHelper.js
-const { env, window } = require("vscode");
+// src/clipboardHelper.js
+import * as vscode from "vscode";
 
-const copyToClipboard = async (
+export const copyToClipboard = async (
   text,
   successMessage = "📁 Copied to clipboard!",
   errorMessage = "Failed to copy to clipboard."
 ) => {
   try {
-    await env.clipboard.writeText(text);
-    window.showInformationMessage(successMessage);
+    await vscode.env.clipboard.writeText(text);
+    vscode.window.showInformationMessage(successMessage);
   } catch (error) {
-    window.showErrorMessage(errorMessage);
+    vscode.window.showErrorMessage(errorMessage);
   }
 };
-
-module.exports = { copyToClipboard };

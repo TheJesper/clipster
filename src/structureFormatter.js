@@ -1,7 +1,8 @@
-const os = require("os");
+// src/structureFormatter.js
+import os from "os";
 
 // Helper to format folder and file structure with icons and appropriate lines
-const formatStructure = (name, type, indent, isLast, hasChildren) => {
+export const formatStructure = (name, type, indent, isLast, hasChildren) => {
   const folderIcon = "📂";
   const fileIcon = "📄";
   const icon = type === "folder" ? folderIcon : fileIcon;
@@ -17,15 +18,9 @@ const formatStructure = (name, type, indent, isLast, hasChildren) => {
 };
 
 // Function to format the root folder structure header with absolute path
-const formatRootFolder = (name, path) => {
+export const formatRootFolder = (name, path) => {
   const boxIcon = "📦";
   const computerIcon = "🖥️";
 
   return `${boxIcon} ${name}${os.EOL}${computerIcon}\u00A0${path}${os.EOL}\u00A0${os.EOL}`;
-};
-
-// Export the formatting functions
-module.exports = {
-  formatStructure,
-  formatRootFolder,
 };
