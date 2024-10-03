@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.1.234",
+  "version": "1.1.235",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "icon": "resources/icon.png",
   "activationEvents": [
@@ -46,6 +46,7 @@
     "mock-fs": "^5.3.0",
     "mock-require": "^3.0.3",
     "rimraf": "^3.0.2",
+    "sinon": "^19.0.2",
     "standard-version": "^9.3.2",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4"
