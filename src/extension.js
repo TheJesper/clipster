@@ -1,13 +1,12 @@
-// src/extension.js
 const vscode = require("vscode");
-const { copyToClipboard } = require("./clipboardHelper");
 const {
   getFolderStructure,
   getFolderStructureAndContent,
   copyRootFolderPath,
   copyRootFolderStructure,
   copyFileContentWithPath,
-} = require("./fileHelpers");
+} = require("./fileHelpers.js");
+const { copyToClipboard } = require("./clipboardHelper.js");
 
 let disposables = [];
 
@@ -21,7 +20,8 @@ const registerCommands = () => {
   disposables.forEach((disposable) => disposable.dispose());
   disposables = [];
 
-  if (config.get("showCopyFileContentWithHeader", true)) {
+  // Register Copy File Content With Header
+  if (config.get("clipster.showCopyFileContentWithHeader", true)) {
     disposables.push(
       vscode.commands.registerCommand(
         "clipster.copyFileContentWithHeader",
@@ -36,7 +36,8 @@ const registerCommands = () => {
     );
   }
 
-  if (config.get("showCopyFolderStructure", true)) {
+  // Register Copy Folder Structure
+  if (config.get("clipster.showCopyFolderStructure", true)) {
     disposables.push(
       vscode.commands.registerCommand(
         "clipster.copyFolderStructure",
@@ -54,52 +55,49 @@ const registerCommands = () => {
     );
   }
 
-  if (config.get("showCopyFolderStructureAndContent", true)) {
+  // Register Copy Folder Structure And Content
+  if (config.get("clipster.showCopyFolderStructureAndContent", true)) {
     disposables.push(
       vscode.commands.registerCommand(
         "clipster.copyFolderStructureAndContent",
         async (uri) => {
-          try {
-            const result = await getFolderStructureAndContent(
-              uri.fsPath,
-              additionalIgnores
-            );
-            if (result) {
-              await copyToClipboard(
-                result,
-                "📁 Folder structure and content copied successfully!"
-              );
-            } else {
-              vscode.window.showErrorMessage(
-                "Failed to retrieve folder structure and content."
-              );
-            }
-          } catch (error) {
-            vscode.window.showErrorMessage(
-              `Error copying folder structure and content: ${error.message}`
-            );
-          }
-        }
-      )
-    );
-  }
-
-  if (config.get("showCopyRootFolderPath", true)) {
-    disposables.push(
-      vscode.commands.registerCommand(
-        "clipster.copyRootFolderPath",
-        async () => {
-          const result = copyRootFolderPath();
+          const result = await getFolderStructureAndContent(
+            uri.fsPath,
+            additionalIgnores
+          );
           await copyToClipboard(
             result,
-            "📁 Root folder path copied successfully!"
+            "📁 Folder structure and content copied successfully!"
           );
         }
       )
     );
   }
 
-  if (config.get("showCopyRootFolderStructure", true)) {
+  // Register Copy Root Folder Path
+  if (config.get("clipster.showCopyRootFolderPath", true)) {
+    disposables.push(
+      vscode.commands.registerCommand(
+        "clipster.copyRootFolderPath",
+        async () => {
+          try {
+            const result = copyRootFolderPath();
+            console.log("Result from copyRootFolderPath:", result);
+            await copyToClipboard(
+              result,
+              "📁 Root folder path copied successfully!"
+            );
+          } catch (error) {
+            console.error("Error during copyRootFolderPath:", error);
+            vscode.window.showErrorMessage("Failed to copy root folder path.");
+          }
+        }
+      )
+    );
+  }
+
+  // Register Copy Root Folder Structure
+  if (config.get("clipster.showCopyRootFolderStructure", true)) {
     disposables.push(
       vscode.commands.registerCommand(
         "clipster.copyRootFolderStructure",
@@ -144,9 +142,16 @@ function activate(context) {
 
 // Deactivation function
 function deactivate() {
-  console.log("Clipster extension deactivated.");
+  console.log("Deactivating Clipster...");
+
+  // Dispose of all registered commands or event listeners
+  disposables.forEach((disposable) => disposable.dispose());
+  disposables = [];
+
+  // Additional cleanup if needed
 }
 
+// Export the activate and deactivate functions
 module.exports = {
   activate,
   deactivate,

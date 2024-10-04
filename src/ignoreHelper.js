@@ -1,79 +1,46 @@
-// src/ignoreHelper.js
+// File: src/ignoreHelper.js
+// Version: 2.1.1
+
 import path from "path";
 import fs from "fs";
-import picomatch from "picomatch";
+import ignore from "ignore";
 
-/**
- * Helper to filter ignored files using relative paths and custom ignore rules.
- */
+// Function to filter ignored files using the ignore library
 export const filterIgnoredFiles = (
   dir,
   files,
   workspaceRoot,
-  ignorePatterns = [],
-  fsModule = fs,
-  pathModule = path
+  additionalIgnores = []
 ) => {
-  const preparedPatterns = prepareIgnorePatterns(ignorePatterns);
+  const ignoreFilePath = path.join(workspaceRoot, ".gitignore");
 
-  const filteredFiles = files.filter((file) => {
-    const isDir = fsModule.statSync(pathModule.join(dir, file)).isDirectory();
+  let ignorePatterns = additionalIgnores;
+  if (fs.existsSync(ignoreFilePath)) {
+    const gitignoreContent = fs.readFileSync(ignoreFilePath, "utf-8");
+    ignorePatterns = ignorePatterns.concat(
+      gitignoreContent.split("\n").map((line) => line.trim())
+    );
+  }
 
-    // Resolve the absolute path of the file.
-    const absoluteFilePath = pathModule.resolve(dir, file.replace(/\/$/, ""));
+  const ig = ignore().add(ignorePatterns);
 
-    // Compute the relative path from 'workspaceRoot' to the file.
-    let relativePath = pathModule.relative(workspaceRoot, absoluteFilePath);
-    relativePath = relativePath.replace(/\\/g, "/");
+  return files.filter((file) => {
+    const absoluteFilePath = path.resolve(dir, file);
+    let relativePath = path.relative(workspaceRoot, absoluteFilePath);
+    relativePath = path.posix.normalize(relativePath.replace(/\\/g, "/"));
 
-    // Append '/' if it's a directory.
+    // Ensure trailing slash for directories
+    const isDir = fs.statSync(absoluteFilePath).isDirectory();
     if (isDir && !relativePath.endsWith("/")) {
       relativePath += "/";
     }
 
-    // Ignore empty paths.
-    if (!relativePath) {
-      relativePath = ".";
-    }
-
-    // Check if the path is ignored.
-    const isIgnored = isPathIgnored(relativePath, preparedPatterns);
-
+    const isIgnored = ig.ignores(relativePath);
     return !isIgnored;
   });
-
-  return filteredFiles;
 };
 
-/**
- * Prepares the ignore patterns, handling negation and order.
- */
-const prepareIgnorePatterns = (patterns) =>
-  patterns.map((pattern) => {
-    const isNegation = pattern.startsWith("!");
-    const cleanPattern = isNegation ? pattern.slice(1) : pattern;
-    const matcher = picomatch(cleanPattern, { dot: true });
-
-    return {
-      pattern: cleanPattern,
-      matcher,
-      isNegation,
-    };
-  });
-
-/**
- * Checks if a given path is ignored based on the ignore patterns.
- */
-const isPathIgnored = (relativePath, ignorePatterns) => {
-  let ignored = false;
-
-  for (const { matcher, isNegation } of ignorePatterns) {
-    const matches = matcher(relativePath);
-
-    if (matches) {
-      ignored = !isNegation;
-    }
-  }
-
-  return ignored;
+// Optionally, expose a method to show the output channel when needed
+export const showClipsterLogger = () => {
+  // Placeholder for future logging functionality
 };

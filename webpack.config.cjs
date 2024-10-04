@@ -1,42 +1,31 @@
 // webpack.config.cjs
-const CopyPlugin = require("copy-webpack-plugin");
-const { fileURLToPath } = require("url");
 const path = require("path");
-
-const dirName = path.dirname(__filename);
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   target: "node",
-  entry: "./src/main.js",
+  entry: "./src/extension.js", // The entry point for your extension
   output: {
-    path: path.resolve(dirName, "dist"),
-    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist"),
+    filename: "extension.js", // Output the bundled extension
     libraryTarget: "commonjs2",
-    devtoolModuleFilenameTemplate: "../[resource-path]",
   },
   devtool: "source-map",
   externals: {
-    vscode: "commonjs vscode",
+    vscode: "commonjs vscode", // Exclude vscode module from bundling
   },
   resolve: {
-    alias: {
-      "~": path.resolve(dirName, "src"),
-    },
-    extensions: [".js", ".jsx"],
-    mainFields: ["browser", "module", "main"],
+    extensions: [".js", ".json"], // Ensure .js files are resolved
   },
   module: {
     rules: [
       {
-        test: /\.js|\.jsx$/i,
+        test: /\.js$/, // Apply the rule to all .js files
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: "babel-loader", // Use Babel loader for transpiling
           options: {
-            presets: [
-              "@babel/preset-env",
-              ["@babel/preset-react", { runtime: "automatic" }],
-            ],
+            presets: ["@babel/preset-env"],
           },
         },
       },
@@ -46,18 +35,18 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(dirName, "src", "extension.js"),
-          to: path.resolve(dirName, "dist"),
+          from: "src/*.js", // Copy all .js files from src to dist
+          to: path.resolve(__dirname, "dist/[name].js"), // Keep the same file names in dist
         },
         {
-          from: path.resolve(dirName, "resources", "icon.png"),
-          to: path.resolve(dirName, "dist", "resources"),
+          from: "resources/**/*", // Copy resources folder (e.g., icon.png)
+          to: path.resolve(__dirname, "dist/[path][name][ext]"),
         },
       ],
     }),
   ],
   mode: process.env.NODE_ENV === "production" ? "production" : "development",
   optimization: {
-    minimize: true,
+    minimize: true, // Minify the output for production builds
   },
 };

@@ -1,4 +1,5 @@
 node_modules/**      # Include only necessary files from node_modules
+dist/**              # Exclude the dist folder
 .git/**              # Exclude the .git folder
 out/clipster.vsix    # Exclude the packaged VSIX file from being packaged again
 *.log                # Exclude log files

@@ -1,4 +1,6 @@
-// src/fileHelpers.js
+// File: src/fileHelpers.js
+// Version: 2.1.1
+
 import fs from "fs";
 import path from "path";
 import * as vscode from "vscode";
@@ -6,7 +8,7 @@ import { formatStructure, formatRootFolder } from "./structureFormatter.js";
 import { filterIgnoredFiles } from "./ignoreHelper.js";
 import os from "os";
 
-// Traverse folder structure, display folders first, and sort alphabetically
+// Function to traverse a directory, formatting its structure for display
 const traverseDirectory = (
   dir,
   workspaceRoot,
@@ -16,20 +18,16 @@ const traverseDirectory = (
 ) => {
   let structure = "";
 
-  // Get entries and apply filtering
+  // Get directory entries and filter based on ignore patterns
   let entries = fs.readdirSync(dir, { withFileTypes: true });
-
-  // Filter files based on ignore patterns
   entries = filterIgnoredFiles(
     dir,
     entries.map((e) => e.name),
     workspaceRoot,
-    additionalIgnores,
-    fs,
-    path
+    additionalIgnores
   );
 
-  // Separate directories and files and sort them alphabetically
+  // Separate and sort directories and files
   const directories = entries
     .filter((entry) => fs.statSync(path.join(dir, entry)).isDirectory())
     .sort();
@@ -72,11 +70,6 @@ export const getFolderStructure = (dir, additionalIgnores = []) => {
   const absolutePath = path.resolve(dir);
   const folderName = path.basename(dir);
 
-  // Log and show notification with root path
-  const message = `💥 Root Path: ${workspaceRoot}`;
-  console.log(message);
-  vscode.window.showInformationMessage(message);
-
   // Format the root folder with absolute path and name of the current folder
   let structure = formatRootFolder(path.basename(workspaceRoot), absolutePath);
   structure += `📂 ${folderName}${os.EOL}`; // Include folder name
@@ -84,13 +77,37 @@ export const getFolderStructure = (dir, additionalIgnores = []) => {
   return structure;
 };
 
-// Function to get folder structure and content (dummy example for now)
+// Function to get folder structure and content
 export const getFolderStructureAndContent = (dir, additionalIgnores = []) => {
   const folderStructure = getFolderStructure(dir, additionalIgnores);
-  return folderStructure; // Modify logic as per requirement
+  let content = folderStructure;
+
+  // Append file contents below the folder structure
+  const appendFileContents = (currentDir) => {
+    let entries = fs.readdirSync(currentDir, { withFileTypes: true });
+    entries = filterIgnoredFiles(
+      currentDir,
+      entries.map((e) => e.name),
+      dir,
+      additionalIgnores
+    );
+
+    entries.forEach((entry) => {
+      const entryPath = path.join(currentDir, entry);
+      if (fs.statSync(entryPath).isFile()) {
+        const fileContent = fs.readFileSync(entryPath, "utf-8");
+        content += `${os.EOL}${os.EOL}📄 ${entryPath}${os.EOL}${fileContent}`;
+      } else if (fs.statSync(entryPath).isDirectory()) {
+        appendFileContents(entryPath);
+      }
+    });
+  };
+
+  appendFileContents(dir);
+  return content;
 };
 
-// Function to copy file content with path (dummy example for now)
+// Function to copy file content with path
 export const copyFileContentWithPath = (uri) => {
   const filePath = uri.fsPath;
   const fileContent = fs.readFileSync(filePath, "utf-8");

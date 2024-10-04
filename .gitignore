@@ -1,8 +1,12 @@
 node_modules/
 out/
+.git/
+dist/
 *.vsix
 yarn.lock
 .DS_Store
 .vscode-test
 .vscode-test-userdata-*
 test/.vscode-test-userdata-*
+logs/
+objects/

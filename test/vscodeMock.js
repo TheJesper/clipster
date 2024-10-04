@@ -1,4 +1,3 @@
-// test/vscodeMock.js
 export const workspace = {
   workspaceFolders: [{ uri: { fsPath: "/mocked/workspace" } }],
   getConfiguration: () => ({
@@ -10,6 +9,12 @@ export const window = {
   showInformationMessage: () => {},
   showErrorMessage: (message) => {
     console.error(`VS Code Error: ${message}`);
+  },
+};
+
+export const env = {
+  clipboard: {
+    writeText: async () => {},
   },
 };
 
