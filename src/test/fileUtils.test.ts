@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 import * as vscode from "vscode";
 import {
   isFile,
@@ -109,7 +110,7 @@ describe("fileUtils", () => {
       await pasteFileFromClipboard(targetUri);
       expect(mockFs.copyFileSync).toHaveBeenCalledWith(
         src,
-        `${dest}/file.ts`
+        path.join(dest, "file.ts")
       );
       expect(vscode.window.showInformationMessage).toHaveBeenCalledWith(
         "File pasted: file.ts"

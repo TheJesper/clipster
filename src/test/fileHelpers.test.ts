@@ -24,8 +24,11 @@ function dirent(name: string): fs.Dirent {
 describe("fileHelpers", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (vscode.workspace as unknown as { workspaceFolders: { uri: { fsPath: string } }[] }).workspaceFolders =
-      [{ uri: { fsPath: "/mock/workspace" } }];
+    (
+      vscode.workspace as unknown as {
+        workspaceFolders: { uri: { fsPath: string } }[];
+      }
+    ).workspaceFolders = [{ uri: { fsPath: "/mock/workspace" } }];
     mockFs.existsSync.mockReturnValue(false); // no .gitignore by default
     (vscode.env.clipboard.writeText as jest.Mock).mockResolvedValue(undefined);
   });
@@ -156,7 +159,7 @@ describe("fileHelpers", () => {
   describe("getFolderStructureAndContent", () => {
     it("throws for an invalid directory path", () => {
       expect(() =>
-        getFolderStructureAndContent(null as unknown as string)
+        getFolderStructureAndContent(null as unknown as string),
       ).toThrow();
     });
 
@@ -276,14 +279,14 @@ describe("fileHelpers", () => {
       ];
       await copyFileContentWithPath(uris);
       expect(vscode.window.showInformationMessage).toHaveBeenCalledWith(
-        "2 file(s) copied with paths."
+        "2 file(s) copied with paths.",
       );
     });
 
     it("shows error when clipboard write fails", async () => {
       (mockFs.readFileSync as jest.Mock).mockReturnValue("content");
       (vscode.env.clipboard.writeText as jest.Mock).mockRejectedValue(
-        new Error("clipboard error")
+        new Error("clipboard error"),
       );
       const uris = [{ fsPath: "/a.ts" } as vscode.Uri];
       await copyFileContentWithPath(uris);
@@ -336,7 +339,7 @@ describe("fileHelpers", () => {
 
     it("reports errors in summary for invalid paths", async () => {
       await createFileOrFolderFromClipboard("bad\x00file.ts", baseUri);
-      expect(vscode.window.showErrorMessage).toHaveBeenCalled();
+      expect(vscode.window.showWarningMessage).toHaveBeenCalled();
     });
 
     it("reports errors for paths that fail to create", async () => {
@@ -348,15 +351,12 @@ describe("fileHelpers", () => {
         throw new Error("Permission denied");
       });
       await createFileOrFolderFromClipboard("file.ts", baseUri);
-      // summary message should still show
-      expect(vscode.window.showInformationMessage).toHaveBeenCalled();
+      // summary with errors should use warning message
+      expect(vscode.window.showWarningMessage).toHaveBeenCalled();
     });
 
     it("processes multiple lines creating mixed files and folders", async () => {
-      await createFileOrFolderFromClipboard(
-        "a.ts\nb.ts\nfolder/",
-        baseUri
-      );
+      await createFileOrFolderFromClipboard("a.ts\nb.ts\nfolder/", baseUri);
       // mkdirSync called for parent dirs + folder
       expect(mockFs.mkdirSync).toHaveBeenCalled();
       expect(mockFs.writeFileSync).toHaveBeenCalled();

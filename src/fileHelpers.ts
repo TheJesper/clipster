@@ -6,7 +6,7 @@ import * as vscode from "vscode";
 import logger from "./logger";
 import { filterIgnoredFiles } from "./ignoreHelper";
 import { readFileContent } from "./fileUtils";
-import { showErrorMessage, showInformationMessage } from "./messageUtils";
+import { showErrorMessage, showInformationMessage, showWarningMessage } from "./messageUtils";
 import { traverseDirectory } from "./directoryUtils";
 import { formatRootFolder } from "./structureFormatter";
 import { getBaseDirectory, resolveTargetPath } from "./pathUtils";
@@ -194,9 +194,8 @@ export const createFileOrFolderFromClipboard = async (
 
   for (const line of lines) {
     if (!isValidPath(line)) {
-      showErrorMessage(`Invalid path: '${line}'`);
-      logger.error(
-        `Invalid path: ${line}`,
+      logger.warn(
+        `Skipped invalid path: ${line}`,
         "createFileOrFolderFromClipboard",
         __filename
       );
@@ -231,9 +230,6 @@ export const createFileOrFolderFromClipboard = async (
         );
       }
     } catch (err) {
-      showErrorMessage(
-        `Failed to create: ${line} - ${(err as Error).message}`
-      );
       logger.error(
         `Error creating path: ${targetPath} - ${(err as Error).message}`,
         "createFileOrFolderFromClipboard",
@@ -245,9 +241,11 @@ export const createFileOrFolderFromClipboard = async (
 
   let summary = `Created ${filesCreated} file(s) and ${foldersCreated} folder(s).`;
   if (errorsOccurred > 0) {
-    summary += ` ${errorsOccurred} item(s) could not be created due to errors.`;
+    summary += ` ${errorsOccurred} item(s) skipped (invalid or failed).`;
+    showWarningMessage(summary);
+  } else {
+    showInformationMessage(summary);
   }
-  showInformationMessage(summary);
   logger.log(summary, "createFileOrFolderFromClipboard", __filename);
 };
 

@@ -171,9 +171,20 @@ function registerCommands(): void {
           ? path.dirname(uri.fsPath)
           : uri.fsPath;
         const result = getFolderStructureAndContent(folderPath, additionalIgnores);
-        await copyToClipboard(result, "Folder structure and content copied.");
+        if (!result || result.trim() === path.basename(folderPath)) {
+          vscode.window.showWarningMessage(
+            "Folder is empty or all files are ignored."
+          );
+          return;
+        }
+        const lineCount = result.split("\n").length;
+        const sizeKB = (Buffer.byteLength(result, "utf8") / 1024).toFixed(1);
+        await copyToClipboard(
+          result,
+          `Copied ${lineCount} lines (${sizeKB} KB) to clipboard.`
+        );
         logger.log(
-          "Folder structure and content copied.",
+          `Folder structure and content copied (${lineCount} lines, ${sizeKB} KB).`,
           "copyFolderStructureAndContent",
           __filename
         );
