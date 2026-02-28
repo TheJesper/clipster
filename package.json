@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.2.107",
+  "version": "1.2.108",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "icon": "resources/icon.png",
   "activationEvents": [
@@ -124,51 +124,56 @@
           "type": "integer",
           "default": 500,
           "description": "Maximum size (in KB) of files to copy from the root folder."
+        },
+        "clipster.showEmojis": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show emoji icons in Clipster menus, notifications, and clipboard output. Requires reload."
         }
       }
     },
     "commands": [
       {
         "command": "clipster.createFileFromClipboard",
-        "title": "Create File or Folder from Clipboard"
+        "title": "📋 Create File or Folder from Clipboard"
       },
       {
         "command": "clipster.copyFolderStructure",
-        "title": "Copy Folder Structure"
+        "title": "📁 Copy Folder Structure"
       },
       {
         "command": "clipster.copyFolderStructureAndContent",
-        "title": "Copy Folder Structure and Content"
+        "title": "📁 Copy Folder Structure and Content"
       },
       {
         "command": "clipster.copyRootFolderPath",
-        "title": "Copy Root Folder Path"
+        "title": "🏠 Copy Root Folder Path"
       },
       {
         "command": "clipster.copyRootFolderStructure",
-        "title": "Copy Root Folder Structure"
+        "title": "🏠 Copy Root Folder Structure"
       },
       {
         "command": "clipster.copyFileContentWithHeader",
-        "title": "Copy File(s) Content with Path"
+        "title": "📄 Copy File(s) Content with Path"
       },
       {
         "command": "clipster.copyRootFolderStructureAndContent",
-        "title": "Copy Root Folder Structure and Content"
+        "title": "🏠 Copy Root Folder Structure and Content"
       },
       {
         "command": "clipster.copyFile",
-        "title": "Copy File(s) and/or Folder(s)"
+        "title": "📄 Copy File(s) and/or Folder(s)"
       },
       {
         "command": "clipster.pasteFile",
-        "title": "Paste File(s) and/or Folder(s)"
+        "title": "📋 Paste File(s) and/or Folder(s)"
       }
     ],
     "submenus": [
       {
         "id": "clipsterMenu",
-        "label": "Clipster"
+        "label": "Clipster 📁"
       }
     ],
     "menus": {
