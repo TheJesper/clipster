@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.107](https://github.com/TheJesper/clipster/compare/v1.2.106...v1.2.107) (2026-02-28)
+
+
+### Bug Fixes
+
+* Update qs to 6.14.1 to fix CVE-2025-15284 ([a25c4c0](https://github.com/TheJesper/clipster/commit/a25c4c0fd7cc884076b88fecc80958d45a9454bb))
+
 ### [1.2.106](https://github.com/TheJesper/clipster/compare/v1.2.105...v1.2.106) (2025-02-19)
 
 ### [1.2.105](https://github.com/TheJesper/clipster/compare/v1.2.104...v1.2.105) (2025-02-18)

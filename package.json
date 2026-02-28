@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.2.106",
+  "version": "1.2.107",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "icon": "resources/icon.png",
   "activationEvents": [
@@ -14,6 +14,7 @@
   },
   "publisher": "conzeon",
   "scripts": {
+    "menu": "node scripts/menu.js",
     "test": "jest --coverage",
     "test:quick": "jest --onlyChanged",
     "test:failed": "jest --onlyFailures",
