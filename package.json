@@ -1,7 +1,7 @@
 {
   "name": "clipster",
   "displayName": "Clipster",
-  "version": "1.2.110",
+  "version": "1.2.111",
   "description": "A VS Code extension to copy paths, folder structures, and contents with customization.",
   "icon": "resources/icon.png",
   "activationEvents": [
@@ -185,42 +185,42 @@
       ],
       "clipsterMenu": [
         {
-          "command": "clipster.createFileFromClipboard",
-          "group": "1_create"
-        },
-        {
           "command": "clipster.copyFolderStructure",
-          "group": "2_copy"
+          "group": "1_copy"
         },
         {
           "command": "clipster.copyFolderStructureAndContent",
-          "group": "2_copy"
+          "group": "1_copy"
         },
         {
           "command": "clipster.copyFileContentWithHeader",
-          "group": "2_copy"
+          "group": "1_copy"
         },
         {
           "command": "clipster.copyRootFolderPath",
-          "group": "3_copyRoot"
+          "group": "2_copyRoot"
         },
         {
           "command": "clipster.copyRootFolderStructure",
-          "group": "3_copyRoot"
+          "group": "2_copyRoot"
         },
         {
           "command": "clipster.copyRootFolderStructureAndContent",
-          "group": "3_copyRoot"
+          "group": "2_copyRoot"
         },
         {
           "command": "clipster.copyFile",
-          "group": "4_file",
+          "group": "3_file",
           "when": "explorerResourceIsFolder || explorerResourceIsFile"
         },
         {
           "command": "clipster.pasteFile",
-          "group": "4_file",
+          "group": "3_file",
           "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "clipster.createFileFromClipboard",
+          "group": "4_create"
         }
       ]
     }
