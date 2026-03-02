@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/TheJesper/clipster/compare/v1.2.112...v1.3.0) (2026-03-02)
+
+
+### Features
+
+* emoji settings, dev menu, repo cleanup, and bug fixes ([837089b](https://github.com/TheJesper/clipster/commit/837089b436d64bc34dda36846218ca27f240c928)), closes [#2](https://github.com/TheJesper/clipster/issues/2)
+
 ### [1.2.112](https://github.com/TheJesper/clipster/compare/v1.2.111...v1.2.112) (2026-02-28)
 
 ### [1.2.111](https://github.com/TheJesper/clipster/compare/v1.2.110...v1.2.111) (2026-02-28)
