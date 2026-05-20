@@ -49,16 +49,19 @@ const MENU = [
   { key: "4", label: "Run Tests",               cmd: "npm test",                   desc: "Jest with coverage" },
   { key: "5", label: "Run Tests (quick)",       cmd: "npm run test:quick",         desc: "Only changed files" },
   { key: "6", label: "Run Tests (failed)",      cmd: "npm run test:failed",        desc: "Re-run failed tests only" },
+  { key: "7", label: "Run Tests (coverage)",    cmd: null,                         desc: "Jest --coverage with summary", action: "test-coverage" },
   null, // separator
-  { key: "7", label: "Package VSIX",            cmd: "node build.js",              desc: "Package .vsix to out/", reload: true },
-  { key: "8", label: "Install in VS Code",      cmd: "npm run install-extension",  desc: "Package + install extension", reload: true },
-  { key: "9", label: "Clean Build & Install",   cmd: "npm run clean-build-install", desc: "Clean + bump + build + install", reload: true },
+  { key: "8", label: "Package VSIX",            cmd: null,                         desc: "Package .vsix and show file info", action: "package-vsix" },
+  { key: "9", label: "Publish to Marketplace",  cmd: null,                         desc: "Publish extension to VS Code marketplace", action: "publish" },
+  { key: "10", label: "Install in VS Code",     cmd: "npm run install-extension",  desc: "Package + install extension", reload: true },
+  { key: "11", label: "Clean Build & Install",  cmd: "npm run clean-build-install", desc: "Clean + bump + build + install", reload: true },
   null,
   { key: "o", label: "Open in VS Code",         cmd: `code "${root}"`,             desc: "Open project in VS Code" },
   { key: "r", label: "Reload VS Code Window",   cmd: null,                         desc: "Reload window to pick up changes", action: "reload-vscode" },
   { key: "u", label: "Uninstall old versions",  cmd: null,                         desc: "Remove all Clipster versions from VS Code", action: "uninstall" },
   null,
   { key: "v", label: "Version Bump",            cmd: "npx standard-version --no-verify", desc: "Bump version + changelog" },
+  { key: "a", label: "Check Vulnerabilities",   cmd: null,                         desc: "Run npm audit for security issues", action: "audit" },
   { key: "s", label: "Git Status",              cmd: "git status",                 desc: "Show working tree status" },
   { key: "l", label: "Git Log (recent)",        cmd: "git log --oneline -15",      desc: "Last 15 commits" },
   null,
@@ -134,6 +137,64 @@ function reloadVSCode() {
   }
 }
 
+function packageVsix() {
+  console.log(`\n${C.cyan}${C.bold}> npx @vscode/vsce package${C.reset}\n`);
+  try {
+    execSync("npx @vscode/vsce package", { stdio: "inherit", cwd: root });
+    // Find the generated .vsix file
+    const files = fs.readdirSync(root).filter((f) => f.endsWith(".vsix")).sort();
+    if (files.length > 0) {
+      const vsixFile = files[files.length - 1];
+      const stats = fs.statSync(path.join(root, vsixFile));
+      const sizeKB = (stats.size / 1024).toFixed(1);
+      console.log(`\n${C.green}${C.bold}Packaged:${C.reset} ${C.white}${vsixFile}${C.reset} ${C.gray}(${sizeKB} KB)${C.reset}`);
+    } else {
+      console.log(`\n${C.green}${C.bold}Done.${C.reset}`);
+    }
+  } catch (err) {
+    console.log(`\n${C.red}${C.bold}Packaging failed (exit ${err.status}).${C.reset}`);
+  }
+}
+
+function publishToMarketplace(rl, callback) {
+  rl.question(`${C.amber}${C.bold}  Are you sure? This publishes to VS Code marketplace [y/N]: ${C.reset}`, (answer) => {
+    const confirmed = answer.trim().toLowerCase();
+    if (confirmed === "y" || confirmed === "yes") {
+      console.log(`\n${C.cyan}${C.bold}> npx @vscode/vsce publish${C.reset}\n`);
+      try {
+        execSync("npx @vscode/vsce publish", { stdio: "inherit", cwd: root });
+        console.log(`\n${C.green}${C.bold}Published successfully!${C.reset}`);
+      } catch (err) {
+        console.log(`\n${C.red}${C.bold}Publish failed (exit ${err.status}).${C.reset}`);
+      }
+    } else {
+      console.log(`${C.dim}  Publish cancelled.${C.reset}`);
+    }
+    callback();
+  });
+}
+
+function runTestsWithCoverage() {
+  console.log(`\n${C.cyan}${C.bold}> npx jest --coverage${C.reset}\n`);
+  try {
+    execSync("npx jest --coverage", { stdio: "inherit", cwd: root });
+    console.log(`\n${C.green}${C.bold}Done.${C.reset}`);
+  } catch (err) {
+    console.log(`\n${C.red}${C.bold}Tests failed (exit ${err.status}).${C.reset}`);
+  }
+}
+
+function checkVulnerabilities() {
+  console.log(`\n${C.cyan}${C.bold}> npm audit${C.reset}\n`);
+  try {
+    execSync("npm audit", { stdio: "inherit", cwd: root });
+    console.log(`\n${C.green}${C.bold}No vulnerabilities found.${C.reset}`);
+  } catch (err) {
+    // npm audit exits non-zero when vulnerabilities are found — that's expected
+    console.log(`\n${C.amber}${C.bold}Audit complete. Review any issues above.${C.reset}`);
+  }
+}
+
 // ── Render Menu ─────────────────────────────────────────────
 function printMenu() {
   console.log("");
@@ -182,6 +243,18 @@ function prompt() {
         uninstallOldVersions();
       } else if (item.action === "reload-vscode") {
         reloadVSCode();
+      } else if (item.action === "package-vsix") {
+        packageVsix();
+      } else if (item.action === "publish") {
+        publishToMarketplace(rl, () => {
+          printMenu();
+          ask();
+        });
+        return;
+      } else if (item.action === "test-coverage") {
+        runTestsWithCoverage();
+      } else if (item.action === "audit") {
+        checkVulnerabilities();
       } else if (item.cmd) {
         run(item.cmd);
         if (item.reload) await showReloadWarning();

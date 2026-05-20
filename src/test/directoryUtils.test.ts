@@ -140,4 +140,146 @@ describe("directoryUtils", () => {
       expect(vscode.window.showErrorMessage).toHaveBeenCalled();
     });
   });
+
+  // ─── traverseDirectory – additional edge cases ──────────────────────────────
+
+  describe("traverseDirectory – edge cases", () => {
+    it("handles symlinks by treating them based on stat result", () => {
+      // Symlinks are resolved via statSync; if stat says file, treat as file
+      (mockFs.readdirSync as jest.Mock).mockReturnValue([
+        makeDirent("symlink-to-file"),
+      ]);
+      (mockFs.statSync as jest.Mock).mockReturnValue({
+        isFile: () => true,
+        isDirectory: () => false,
+      });
+      const result = traverseDirectory("/dir", "/dir");
+      expect(result).toContain("symlink-to-file");
+    });
+
+    it("handles symlink to directory by recursing into it", () => {
+      (mockFs.readdirSync as jest.Mock).mockImplementation((p: unknown) => {
+        if (String(p) === "/dir") {
+          return [makeDirent("symlink-dir")];
+        }
+        return [makeDirent("inner.ts")];
+      });
+      (mockFs.statSync as jest.Mock).mockImplementation((p: unknown) => ({
+        isFile: () => String(p).endsWith(".ts"),
+        isDirectory: () => !String(p).endsWith(".ts"),
+      }));
+
+      const result = traverseDirectory("/dir", "/dir");
+      expect(result).toContain("symlink-dir");
+      expect(result).toContain("inner.ts");
+    });
+
+    it("handles permission denied on a subdirectory (readdirSync throws)", () => {
+      (mockFs.readdirSync as jest.Mock).mockImplementation((p: unknown) => {
+        if (String(p) === "/dir") {
+          return [makeDirent("restricted")];
+        }
+        // Attempting to read the restricted directory throws
+        throw new Error("EACCES: permission denied");
+      });
+      (mockFs.statSync as jest.Mock).mockReturnValue({
+        isFile: () => false,
+        isDirectory: () => true,
+      });
+
+      // Should not throw; restricted dir has no visible children so not recursed
+      const result = traverseDirectory("/dir", "/dir");
+      expect(result).toContain("restricted");
+    });
+
+    it("handles very deep nesting (5 levels)", () => {
+      // Build a chain: /dir -> d0 -> d1 -> d2 -> d3 -> d4 -> leaf.ts
+      const depthDirs = ["/dir", "d0", "d1", "d2", "d3", "d4"];
+      (mockFs.readdirSync as jest.Mock).mockImplementation((p: unknown) => {
+        const s = String(p).replace(/\\/g, "/");
+        for (let i = 0; i < depthDirs.length - 1; i++) {
+          if (
+            (i === 0 && s === "/dir") ||
+            (i > 0 && s.endsWith("/" + depthDirs[i]))
+          ) {
+            return [makeDirent(depthDirs[i + 1])];
+          }
+        }
+        // deepest level returns a file
+        return [makeDirent("leaf.ts")];
+      });
+      (mockFs.statSync as jest.Mock).mockImplementation((p: unknown) => ({
+        isFile: () => String(p).endsWith(".ts"),
+        isDirectory: () => !String(p).endsWith(".ts"),
+      }));
+
+      const result = traverseDirectory("/dir", "/dir");
+      expect(result).toContain("d0");
+      expect(result).toContain("leaf.ts");
+    });
+
+    it("handles a directory with only ignored files (all filtered out)", () => {
+      (mockFs.readdirSync as jest.Mock).mockReturnValue([
+        makeDirent("node_modules"),
+      ]);
+      (mockFs.statSync as jest.Mock).mockReturnValue({
+        isFile: () => false,
+        isDirectory: () => true,
+      });
+      // Pass node_modules/ as additional ignore
+      const result = traverseDirectory("/dir", "/dir", ["node_modules/"]);
+      // The result should not contain node_modules
+      expect(result).not.toContain("node_modules");
+    });
+
+    it("handles entries that are neither file nor directory (e.g., socket)", () => {
+      (mockFs.readdirSync as jest.Mock).mockReturnValue([
+        makeDirent("my.sock"),
+        makeDirent("normal.ts"),
+      ]);
+      (mockFs.statSync as jest.Mock).mockImplementation((p: unknown) => ({
+        isFile: () => String(p).endsWith(".ts"),
+        isDirectory: () => false,
+      }));
+
+      const result = traverseDirectory("/dir", "/dir");
+      // my.sock is not a file and not a directory, so it should be skipped
+      expect(result).toContain("normal.ts");
+      expect(result).not.toContain("my.sock");
+    });
+
+    it("sorts directories and files alphabetically", () => {
+      (mockFs.readdirSync as jest.Mock).mockImplementation((p: unknown) => {
+        if (String(p) === "/dir") {
+          return [
+            makeDirent("zebra.ts"),
+            makeDirent("alpha.ts"),
+            makeDirent("beta"),
+            makeDirent("alpha-dir"),
+          ];
+        }
+        return [];
+      });
+      (mockFs.statSync as jest.Mock).mockImplementation((p: unknown) => {
+        const s = String(p);
+        const isDir = s.endsWith("beta") || s.endsWith("alpha-dir");
+        return {
+          isFile: () => !isDir,
+          isDirectory: () => isDir,
+        };
+      });
+
+      const result = traverseDirectory("/dir", "/dir");
+      const alphaDir = result.indexOf("alpha-dir");
+      const beta = result.indexOf("beta");
+      const alphaFile = result.indexOf("alpha.ts");
+      const zebraFile = result.indexOf("zebra.ts");
+
+      // Directories come first, sorted
+      expect(alphaDir).toBeLessThan(beta);
+      // Files come after directories, sorted
+      expect(beta).toBeLessThan(alphaFile);
+      expect(alphaFile).toBeLessThan(zebraFile);
+    });
+  });
 });

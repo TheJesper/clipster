@@ -1,0 +1,13 @@
+{
+  "identity": {
+    "name": "Clipster",
+    "full_name": "Clipster - VS Code Path & Structure Copier",
+    "emoji": "📋",
+    "tagline": "",
+    "description": "VS Code extension to copy paths, folder structures, and contents with customization.",
+    "summary": "VS Code extension to copy paths, folder structures, and contents with customization.",
+    "tldr": "Clipster",
+    "tier": "standard",
+    "stack": ""
+  }
+}

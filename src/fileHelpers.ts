@@ -144,12 +144,34 @@ export const copyRootFolderStructureAndContent = (
 };
 
 export const isValidPath = (filePath: string): boolean => {
-  const baseName = path.basename(filePath);
+  if (!filePath || filePath.length > 260) {
+    return false;
+  }
+  // Each segment must be a valid filename (no code, prose, or garbage)
+  const segments = filePath.replace(/\\/g, "/").replace(/\/$/, "").split("/");
   const invalidChars =
     process.platform === "win32"
-      ? /[<>:"/\\|?*\x00-\x1F]/g
-      : /[/\x00]/g;
-  return !invalidChars.test(baseName);
+      ? /[<>:"|?*\x00-\x1F]/g
+      : /[\x00]/g;
+  const codePattern = /[(){}\[\];=+!@#$%^&`~]/;
+  const whitespaceHeavy = /\s{2,}/;
+  for (const seg of segments) {
+    if (!seg || seg.length > 255) {
+      return false;
+    }
+    if (invalidChars.test(seg)) {
+      return false;
+    }
+    // Reject segments that look like code or prose (contain operators, brackets, etc.)
+    if (codePattern.test(seg)) {
+      return false;
+    }
+    // Reject segments with consecutive whitespace (likely prose, not a filename)
+    if (whitespaceHeavy.test(seg)) {
+      return false;
+    }
+  }
+  return true;
 };
 
 export const createFileOrFolderFromClipboard = async (
